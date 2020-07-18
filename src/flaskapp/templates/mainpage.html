@@ -28,7 +28,7 @@
             </button>
         </div>
         <div class="p-4">
-            <h1><a href="index.html" class="logo">HEVEN_T</a></h1>
+            <h1><a href="/main" class="logo">HEVEN_T</a></h1>
             <ul class="list-unstyled components mb-5">
                 <li class="active">
                     <a href="#"><span class="fa fa-home mr-3"></span> 정보 1</a>
@@ -83,6 +83,30 @@
 
 <!-- our JS -->
 <script src="/static/js/base.js"></script>
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyBrQ0-5F9LWQ40rYRXShRlXbodsDvo-Y58",
+    authDomain: "heven-t.firebaseapp.com",
+    databaseURL: "https://heven-t.firebaseio.com",
+    projectId: "heven-t",
+    storageBucket: "heven-t.appspot.com",
+    messagingSenderId: "260591339216",
+    appId: "1:260591339216:web:bfec4a353da018b7d880d5",
+    measurementId: "G-WWBCTBTTL7"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
 
 </body>
 </html>
