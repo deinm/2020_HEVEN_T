@@ -35,17 +35,23 @@ elif not app.debug and not app.testing:
         'default-src': ["'self'",
                         ],
         'img-src': ["'self'  data:",
+                    "https://i1.daumcdn.net/"
                     ],
         'script-src': ["'self'",
                        "https://code.jquery.com/jquery-3.4.1.min.js",  # jquery
                        "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js",  # bootstrap
                        "https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js",  # popper
+                       "https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js",   # firebase
+                       "https://www.gstatic.com/firebasejs/7.16.1/firebase-analytics.js",   # firebase analytics
+                       "https://dapi.kakao.com/v2/maps/sdk.js",
+                       "https://t1.daumcdn.net/mapjsapi/js/main/4.2.0/kakao.js",
                        ],
         'style-src': ["'self'",
-                      "https://stackpath.bootstrapcdn.com",  # bootstrap
+                      "https://stackpath.bootstrapcdn.com/",  # bootstrap
                       'https://fonts.googleapis.com/',  # google web fonts (css)
                       ],
-        'font-src': ['https://fonts.gstatic.com/',  # google web fonts (font files)
+        'font-src': ["https://fonts.gstatic.com/",  # google web fonts (font files)
+                     "https://stackpath.bootstrapcdn.com"
                      ]
     }
     Talisman(app,
