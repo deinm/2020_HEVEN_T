@@ -8338,11 +8338,6 @@ a[data-toggle="collapse"] {
 .subscribe-form .form-control {
 	background: #0172e4; }
 
-#map {
-	width:100%;
-	height:850px;
-}
-
 .float{
 	position:fixed;
 	width:60px;
@@ -8359,7 +8354,7 @@ a[data-toggle="collapse"] {
 }
 
 .float:hover {
-    background-color: #0172e4;
+    background: #0080ff;
 	font-size: large;
 	box-shadow: 2px 2px 3px #999;
 }
