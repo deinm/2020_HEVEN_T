@@ -35,9 +35,15 @@ elif not app.debug and not app.testing:
         'default-src': ["'self'",
                         ],
         'img-src': ["'self'  data:",
-                    "https://i1.daumcdn.net/"
+                    "https://i1.daumcdn.net/",
+                    "https://t1.daumcdn.net/",
+                    "https://map0.daumcdn.net/",
+                    "https://map1.daumcdn.net/",
+                    "https://map2.daumcdn.net/",
+                    "https://map3.daumcdn.net/",
                     ],
         'script-src': ["'self'",
+                       "unsafe-inline",
                        "https://code.jquery.com/jquery-3.4.1.min.js",  # jquery
                        "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js",  # bootstrap
                        "https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js",  # popper
