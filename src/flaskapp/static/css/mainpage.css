@@ -8302,11 +8302,11 @@ a[data-toggle="collapse"] {
 	transition: all 0.3s; }
 
 .btn.btn-primary {
-	background: #494ca2;
-	border-color: #494ca2; }
+	background: #0172e4;
+	border-color: #0172e4; }
 	.btn.btn-primary:hover, .btn.btn-primary:focus {
-		background: #494ca2 !important;
-		border-color: #494ca2 !important; }
+		background: #0172e4 !important;
+		border-color: #0172e4 !important; }
 
 .footer p {
 	color: rgba(255, 255, 255, 0.5); }
