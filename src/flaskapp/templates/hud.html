@@ -20,45 +20,120 @@
 <div class="container center">
     <div class="row">
 
-    <div class="col-3">
+     {% if 0 <= dust %}
+      <div class="col-md-2 mb-5">
         <div class="card h-100">
-            <img class="card-img-top" src="https://i.postimg.cc/hGY1CKCF/image.jpg" alt="">
-            <div class="card-body">
-                <h4 class="card-title">미세먼지</h4>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque sequi doloribus.</p>
-            </div>
+          <img class="card-img-top"
+
+            {% if 0 <= dust < 30 %}
+		        src="https://i.postimg.cc/4dL2JHT2/512-512.png"
+            {% elif 30 <= dust < 80 %}
+		        src="https://i.postimg.cc/bJNFcH42/512-512.png"
+            {% elif 80 <= dust < 150 %}
+		        src="https://i.postimg.cc/HswFKsSZ/512-512.png"
+            {% elif 150 <= dust %}
+		        src="https://i.postimg.cc/QCpYR0q9/512-512.png"
+            {% endif %}
+             alt="">
+
+          <div class="card-body">
+            <h4 class="card-title">미세먼지</h4>
+            <p class="card-text">
+
+                <div id="div1"></div>
+                <script>
+                function getSyncScriptParams() {
+                    var a = document.getElementsByTagName(dust)}
+                    var x = document.getElementById(dust)
+                </script>
+
+            </p>
+          </div>
         </div>
+     {% else %}
+            <div class="col-md-2 mb-5">
+     {% endif %}
+      </div>
+
+
+
+     {% if 0 <= uv %}
+      <div class="col-md-2 mb-5">
+        <div class="card h-100">
+          <img class="card-img-top"
+
+            {% if 0 <= uv < 3 %}
+		        src="https://i.postimg.cc/3xgrtTpY/1-512-512.png"
+            {% elif 3 <= uv < 6 %}
+		        src="https://i.postimg.cc/V67kXWtt/1-512-512.png"
+            {% elif 6 <= uv < 8 %}
+		        src="https://i.postimg.cc/PJPryvbR/1-512-512.png"
+            {% elif 8 <= uv < 11 %}
+		        src="https://i.postimg.cc/Z59pn01j/1-512-512.png"
+            {% elif 11 <= uv %}
+		        src="https://i.postimg.cc/ncSqnqwC/1-512-512.png"
+            {% endif %}
+             alt="">
+
+            <div class="card-body">
+            <h4 class="card-title">자외선</h4>
+            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque sequi doloribus totam ut praesentium aut.</p>
+          </div>
+        </div>
+     {% else %}
+            <div class="col-md-2 mb-5">
+     {% endif %}
+      </div>
+
+
+
+     {% if 0 < rain %}
+      <div class="col-md-2 mb-5">
+        <div class="card h-100">
+          <img class="card-img-top" src="https://i.postimg.cc/k4TMqsGr/image.png" alt="">
+          <div class="card-body">
+            <h4 class="card-title">강우량</h4>
+            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
+          </div>
+        </div>
+     {% else %}
+            <div class="col-md-2 mb-5">
+     {% endif %}
+      </div>
+
+
+
+
+     {% if 30 < co2 %}
+      <div class="col-md-2 mb-5">
+        <div class="card h-100">
+          <img class="card-img-top" src="https://i.postimg.cc/sxZw5KLH/CO2-512-512.png" alt="">
+          <div class="card-body">
+            <h4 class="card-title">CO2</h4>
+            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
+          </div>
+        </div>
+     {% else %}
+            <div class="col-md-2 mb-5">
+     {% endif %}
+      </div>
     </div>
 
-    <div class="col-3">
-        <div class="card h-100">
-            <img class="card-img-top" src="https://i.postimg.cc/c4WMk9cJ/1.png" alt="">
-            <div class="card-body">
-                <h4 class="card-title">자외선</h4>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque sequi doloribus totam ut praesentium aut.</p>
-            </div>
-        </div>
-    </div>
 
-    <div class="col-3">
-        <div class="card h-100">
-            <img class="card-img-top" src="https://i.postimg.cc/Hkdmxg9C/1.png" alt="">
-            <div class="card-body">
-                <h4 class="card-title">강우량</h4>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
-            </div>
-        </div>
-    </div>
 
-    <div class="col-3">
-        <div class="card h-100">
-        <img class="card-img-top" src="https://i.postimg.cc/Sxp5rfnL/CO2.png" alt="">
-            <div class="card-body">
-                <h4 class="card-title">CO2</h4>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
-            </div>
-        </div>
-    </div>
+
+    {% if 30 <= co2 %}
+       <iframe src="https://translate.google.co.kr/translate_tts?ie=UTF-8&q=%EC%9D%B4%EC%82%B0%ED%99%94%ED%83%84%EC%86%8C%20%EB%86%8D%EB%8F%84%EA%B0%80%20%EB%86%92%EC%8A%B5%EB%8B%88%EB%8B%A4.%20%ED%99%98%EA%B8%B0%EB%A5%BC%20%ED%95%B4%EC%A3%BC%EC%84%B8%EC%9A%94.&tl=ko&total=1&idx=0&textlen=25&tk=578951.923312&client=webapp&prev=input" allow="autoplay" id="audio" style="display:none"></iframe>
+
+    {% endif %}
+
+
+
+
+
+
+
+
     </div>
     <a href="/main" id="convertMain" class="float">
         <i class="fa fa-arrow-right my-float"></i>
