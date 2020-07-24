@@ -17,122 +17,82 @@
   </head>
 <body>
 
-<div class="container center">
-    <div class="row">
+<div class="container h-100">
+    <div class="row h-100">
 
-     {% if 0 <= dust %}
-      <div class="col-md-2 mb-5">
-        <div class="card h-100">
-          <img class="card-img-top"
-
-            {% if 0 <= dust < 30 %}
-		        src="https://i.postimg.cc/4dL2JHT2/512-512.png"
-            {% elif 30 <= dust < 80 %}
-		        src="https://i.postimg.cc/bJNFcH42/512-512.png"
-            {% elif 80 <= dust < 150 %}
-		        src="https://i.postimg.cc/HswFKsSZ/512-512.png"
-            {% elif 150 <= dust %}
-		        src="https://i.postimg.cc/QCpYR0q9/512-512.png"
-            {% endif %}
-             alt="">
-
-          <div class="card-body">
-            <h4 class="card-title">미세먼지</h4>
-            <p class="card-text">
-
-                <div id="div1"></div>
-                <script>
-                function getSyncScriptParams() {
-                    var a = document.getElementsByTagName(dust)}
-                    var x = document.getElementById(dust)
-                </script>
-
-            </p>
-          </div>
-        </div>
-     {% else %}
-            <div class="col-md-2 mb-5">
-     {% endif %}
-      </div>
-
-
-
-     {% if 0 <= uv %}
-      <div class="col-md-2 mb-5">
-        <div class="card h-100">
-          <img class="card-img-top"
-
-            {% if 0 <= uv < 3 %}
-		        src="https://i.postimg.cc/3xgrtTpY/1-512-512.png"
-            {% elif 3 <= uv < 6 %}
-		        src="https://i.postimg.cc/V67kXWtt/1-512-512.png"
-            {% elif 6 <= uv < 8 %}
-		        src="https://i.postimg.cc/PJPryvbR/1-512-512.png"
-            {% elif 8 <= uv < 11 %}
-		        src="https://i.postimg.cc/Z59pn01j/1-512-512.png"
-            {% elif 11 <= uv %}
-		        src="https://i.postimg.cc/ncSqnqwC/1-512-512.png"
-            {% endif %}
-             alt="">
-
+    {% if 0 <= dust %}
+    <div class="col-md-3 card-auto">
+        <div class="card h-100 space_300">
+            <img class="card-img-top"
+                {% if 0 <= dust < 30 %} src="https://i.postimg.cc/4dL2JHT2/512-512.png"
+                {% elif 30 <= dust < 80 %} src="https://i.postimg.cc/bJNFcH42/512-512.png"
+                {% elif 80 <= dust < 150 %} src="https://i.postimg.cc/HswFKsSZ/512-512.png"
+                {% elif 150 <= dust %} src="https://i.postimg.cc/QCpYR0q9/512-512.png"
+                {% endif %}
+            >
             <div class="card-body">
-            <h4 class="card-title">자외선</h4>
-            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque sequi doloribus totam ut praesentium aut.</p>
-          </div>
+                <h4 class="card-title">미세먼지</h4>
+                <p class="card-text">
+                    <div id="div1">card text</div>
+                </p>
+            </div>
         </div>
-     {% else %}
-            <div class="col-md-2 mb-5">
-     {% endif %}
-      </div>
-
-
-
-     {% if 0 < rain %}
-      <div class="col-md-2 mb-5">
-        <div class="card h-100">
-          <img class="card-img-top" src="https://i.postimg.cc/k4TMqsGr/image.png" alt="">
-          <div class="card-body">
-            <h4 class="card-title">강우량</h4>
-            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
-          </div>
-        </div>
-     {% else %}
-            <div class="col-md-2 mb-5">
-     {% endif %}
-      </div>
-
-
-
-
-     {% if 30 < co2 %}
-      <div class="col-md-2 mb-5">
-        <div class="card h-100">
-          <img class="card-img-top" src="https://i.postimg.cc/sxZw5KLH/CO2-512-512.png" alt="">
-          <div class="card-body">
-            <h4 class="card-title">CO2</h4>
-            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
-          </div>
-        </div>
-     {% else %}
-            <div class="col-md-2 mb-5">
-     {% endif %}
-      </div>
     </div>
-
-
-
-
-    {% if 30 <= co2 %}
-       <iframe src="https://translate.google.co.kr/translate_tts?ie=UTF-8&q=%EC%9D%B4%EC%82%B0%ED%99%94%ED%83%84%EC%86%8C%20%EB%86%8D%EB%8F%84%EA%B0%80%20%EB%86%92%EC%8A%B5%EB%8B%88%EB%8B%A4.%20%ED%99%98%EA%B8%B0%EB%A5%BC%20%ED%95%B4%EC%A3%BC%EC%84%B8%EC%9A%94.&tl=ko&total=1&idx=0&textlen=25&tk=578951.923312&client=webapp&prev=input" allow="autoplay" id="audio" style="display:none"></iframe>
-
+    {% else %}
+    <div class="col-md-3 card-auto"></div>
     {% endif %}
 
+    {% if 0 <= uv %}
+    <div class="col-md-3 card-auto">
+        <div class="card h-100 space_300">
+            <img class="card-img-top"
+            {% if 0 <= uv < 3 %} src="https://i.postimg.cc/3xgrtTpY/1-512-512.png"
+            {% elif 3 <= uv < 6 %} src="https://i.postimg.cc/V67kXWtt/1-512-512.png"
+            {% elif 6 <= uv < 8 %} src="https://i.postimg.cc/PJPryvbR/1-512-512.png"
+            {% elif 8 <= uv < 11 %} src="https://i.postimg.cc/Z59pn01j/1-512-512.png"
+            {% elif 11 <= uv %} src="https://i.postimg.cc/ncSqnqwC/1-512-512.png"
+            {% endif %}
+            >
+            <div class="card-body">
+                <h4 class="card-title">자외선</h4>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque sequi doloribus totam ut praesentium aut.</p>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-md-3 card-auto">
+    </div>
+    {% endif %}
 
+    {% if 0 < rain %}
+    <div class="col-md-3 card-auto">
+        <div class="card h-100 space_300">
+            <img class="card-img-top" src="https://i.postimg.cc/k4TMqsGr/image.png" alt="">
+            <div class="card-body">
+                <h4 class="card-title">강우량</h4>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-md-3 card-auto">
+    </div>
+    {% endif %}
 
-
-
-
-
+    {% if 30 < co2 %}
+    <div class="col-md-3 card-auto">
+        <div class="card h-100 space_300">
+            <img class="card-img-top" src="https://i.postimg.cc/sxZw5KLH/CO2-512-512.png" alt="">
+            <div class="card-body">
+                <h4 class="card-title">CO2</h4>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-md-3 card-auto">
+    </div>
+    {% endif %}
 
     </div>
     <a href="/main" id="convertMain" class="float">
@@ -140,11 +100,11 @@
     </a>
 </div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
 <!-- The core Firebase JS SDK is always required and must be listed first -->
 <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
@@ -155,6 +115,7 @@
 
 <!-- our JS -->
 <script src="/static/js/base.js"></script>
+<script src="/static/js/hud.js"></script>
 
 <script>
   // Your web app's Firebase configuration

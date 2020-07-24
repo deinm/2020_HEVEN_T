@@ -8366,3 +8366,8 @@ a[data-toggle="collapse"] {
 #navbarButton{
 	z-index: 4;
 }
+
+.card-auto{
+	margin-top: auto;
+	margin-bottom: auto;
+}

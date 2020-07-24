@@ -131,5 +131,7 @@ body{font-family: 'Noto Sans KR', sans-serif !important; font-weight:400; text-a
 
 .div_scroll {overflow: auto}
 
-.center {
+html, body{
+    height:100%;
+    width:100%;
 }
