@@ -31,9 +31,9 @@
                 {% endif %}
             >
             <div class="card-body">
-                <h4 class="card-title">미세먼지 {{ dust }}</h4>
+                <h4 class="card-title">미세먼지 : {{ dust }}</h4>
                 <p class="card-text">
-                    <div id="div1">card text</div>
+                    <div id="div1">미세먼지</div>
                 </p>
             </div>
         </div>
@@ -54,8 +54,8 @@
             {% endif %}
             >
             <div class="card-body">
-                <h4 class="card-title">자외선 {{ uv }}</h4>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque sequi doloribus totam ut praesentium aut.</p>
+                <h4 class="card-title">자외선 : {{ uv }}</h4>
+                <p class="card-text">자외선</p>
             </div>
         </div>
     </div>
@@ -69,8 +69,8 @@
         <div class="card h-100 space_300">
             <img class="card-img-top" src="/static/image/rain.png" alt="">
             <div class="card-body">
-                <h4 class="card-title">강우량 {{ rain }}</h4>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
+                <h4 class="card-title">강우량 : {{ rain }}</h4>
+                <p class="card-text">강우량</p>
             </div>
         </div>
     </div>
@@ -84,10 +84,16 @@
         <div class="card h-100 space_300">
             <img class="card-img-top" src="/static/image/CO2.png" alt="">
             <div class="card-body">
-                <h4 class="card-title">CO2 {{ co2 }}</h4>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
+                <h4 class="card-title">CO2 : {{ co2 }}</h4>
+                <p class="card-text">co2</p>
             </div>
         </div>
+
+        <iframe src="https://translate.google.co.kr/translate_tts?ie=UTF-8&q=%ED%99%98%EA%B8%B0%ED%95%98%EC%84%B8%EC%9A%94&tl=ko&total=1&idx=0&textlen=5&tk=575055.918864&client=webapp&prev=input" allow="autoplay" id="audio" style="display:none"></iframe>
+        <audio id="audio" autoplay>
+            <source src="https://translate.google.co.kr/translate_tts?ie=UTF-8&q=%ED%99%98%EA%B8%B0%ED%95%98%EC%84%B8%EC%9A%94&tl=ko&total=1&idx=0&textlen=5&tk=575055.918864&client=webapp&prev=input">
+        </audio>
+
     </div>
     {% else %}
     <div class="col-md-3 card-auto">
