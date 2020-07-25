@@ -24,10 +24,10 @@
     <div class="col-md-3 card-auto">
         <div class="card h-100 space_300">
             <img class="card-img-top"
-                {% if 0 <= dust < 30 %} src="https://i.postimg.cc/4dL2JHT2/512-512.png"
-                {% elif 30 <= dust < 80 %} src="https://i.postimg.cc/bJNFcH42/512-512.png"
-                {% elif 80 <= dust < 150 %} src="https://i.postimg.cc/HswFKsSZ/512-512.png"
-                {% elif 150 <= dust %} src="https://i.postimg.cc/QCpYR0q9/512-512.png"
+                {% if 0 <= dust < 30 %} src="/static/image/fine_dust_good.png"
+                {% elif 30 <= dust < 80 %} src="/static/image/fine_dust_normal.png"
+                {% elif 80 <= dust < 150 %} src="/static/image/fine_dust_bad.png"
+                {% elif 150 <= dust %} src="/static/image/fine_dust_very_bad.png"
                 {% endif %}
             >
             <div class="card-body">
@@ -46,11 +46,11 @@
     <div class="col-md-3 card-auto">
         <div class="card h-100 space_300">
             <img class="card-img-top"
-            {% if 0 <= uv < 3 %} src="https://i.postimg.cc/3xgrtTpY/1-512-512.png"
-            {% elif 3 <= uv < 6 %} src="https://i.postimg.cc/V67kXWtt/1-512-512.png"
-            {% elif 6 <= uv < 8 %} src="https://i.postimg.cc/PJPryvbR/1-512-512.png"
-            {% elif 8 <= uv < 11 %} src="https://i.postimg.cc/Z59pn01j/1-512-512.png"
-            {% elif 11 <= uv %} src="https://i.postimg.cc/ncSqnqwC/1-512-512.png"
+            {% if 0 <= uv < 3 %} src="/static/image/UV_very_safe.png"
+            {% elif 3 <= uv < 6 %} src="/static/image/UV_safe.png"
+            {% elif 6 <= uv < 8 %} src="/static/image/UV_normal.png"
+            {% elif 8 <= uv < 11 %} src="/static/image/UV_danger.png"
+            {% elif 11 <= uv %} src="/static/image/UV_very_danger.png"
             {% endif %}
             >
             <div class="card-body">
@@ -67,7 +67,7 @@
     {% if 0 < rain %}
     <div class="col-md-3 card-auto">
         <div class="card h-100 space_300">
-            <img class="card-img-top" src="https://i.postimg.cc/k4TMqsGr/image.png" alt="">
+            <img class="card-img-top" src="/static/image/rain.png" alt="">
             <div class="card-body">
                 <h4 class="card-title">강우량</h4>
                 <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
