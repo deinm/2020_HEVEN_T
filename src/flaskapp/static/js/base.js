@@ -20,3 +20,7 @@ $('#convertMain').click(function(){
       $('#sidebar').toggleClass('active');
   });
 })(jQuery);
+
+playAlert = setInterval(function() {
+   alert('hello');
+}, 3000);
