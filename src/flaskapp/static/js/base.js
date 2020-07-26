@@ -17,10 +17,6 @@ $('#convertMain').click(function(){
 	fullHeight();
 
 	$('#sidebarCollapse').on('click', function () {
-      $('#sidebar').toggleClass('active');
-  });
+		$('#sidebar').toggleClass('active');
+	});
 })(jQuery);
-
-playAlert = setInterval(function() {
-   alert('hello');
-}, 3000);
