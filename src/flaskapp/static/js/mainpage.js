@@ -1,8 +1,8 @@
 let map;
 let marker;
 let mapContainer;
-let geocoder;
-// geocoder = new kakao.maps.services.Geocoder();
+// let geocoder;
+geocoder = new kakao.maps.services.Geocoder();
 
 $( document ).ready(function() {
 	mapContainer = document.getElementById('map'), // 지도를 표시할 div
@@ -41,21 +41,17 @@ $( document ).ready(function() {
                 let message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
                 message += '경도는 ' + latlng.getLng() + ' 입니다';
 
-                // 원그리기
-                // let circle = new kakao.maps.Circle({
-                //     center : new kakao.maps.LatLng(latlng.getLat(), latlng.getLng()),  // 원의 중심좌표 입니다
-                //     radius: 5, // 미터 단위의 원의 반지름입니다
-                //     strokeWeight: 3, // 선의 두께입니다
-                //     strokeColor: '#00a0e9', // 선의 색깔입니다
-                //     strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-                //     strokeStyle: 'solid', // 선의 스타일 입니다
-                //     fillColor: '#00a0e9', // 채우기 색깔입니다
-                //     fillOpacity: 0.2  // 채우기 불투명도 입니다
-                // });
-                //
-                // circle.setMap(map);
-
                 $('#location').text(message);
+
+                searchAddrFromCoords(map.getCenter(), consolePrint);
+
+                searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
+                    if (status === kakao.maps.services.Status.OK) {
+                        console.log("searchDetailAddrFromCoords");
+                        console.log(result[0].road_address.address_name);
+                        console.log(result[0].address.address_name);
+                    }
+                });
 
                 $.ajax({
                     type: "post",
@@ -66,13 +62,15 @@ $( document ).ready(function() {
                     let res = JSON.parse(result);
                     console.log(res);
 
-                    $("#describe").removeClass("dis_none");
-                    $("#describe1").removeClass("dis_none");
+                    $("#describe").addClass("dis_none");
+                    $("#describe1").addClass("dis_none");
+                    $("#info_text").addClass("dis_none");
 
                     if(res.hasOwnProperty('none')){
                         $("#no_data").removeClass("dis_none");
                         $("#no_data1").removeClass("dis_none");
                         $("#no_data2").removeClass("dis_none");
+                        $("#weather_button").removeClass("dis_none");
 
                         $("#dust").addClass("dis_none");
                         $("#dustText").addClass("dis_none");
@@ -86,13 +84,14 @@ $( document ).ready(function() {
 
                         $('#no_data').text("🚘");
                         $('#no_data1').text("아직 데이터가 없어요.");
-                        $('#no_data2').text("오늘은 이곳으로 드라이브를 떠나볼까요?");
+                        $('#no_data2').text("오늘은 이곳으로 떠나볼까요?");
                         return;
                     }
 
                     $("#no_data").addClass("dis_none");
                     $("#no_data1").addClass("dis_none");
                     $("#no_data2").addClass("dis_none");
+                    $("#weather_button").addClass("dis_none");
 
                     $("#dust").removeClass("dis_none");
                     $("#dustText").removeClass("dis_none");
@@ -152,16 +151,12 @@ $( document ).ready(function() {
                 .fail(function () {
                     console.log("오류 발생");
                });
-
             });
-
         });
-
-    } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
-
+    }
+    else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
         let locPosition = new kakao.maps.LatLng(33.450701, 126.570667),
-            message = 'geolocation을 사용할수 없어요..';
-
+            message = '현재 위치를 받아올 수 없습니다. 위치정보 사용을 허용해 주세요.';
         displayMarker(locPosition, message);
     }
 });
@@ -191,13 +186,35 @@ function displayMarker(locPosition, message) {
     map.setCenter(locPosition);
 }
 
-// function searchAddrFromCoords(coords, callback) {
-//     // 좌표로 행정동 주소 정보를 요청합니다
-//     geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
-// }
-//
-// function searchDetailAddrFromCoords(coords, callback) {
-//     // 좌표로 법정동 상세 주소 정보를 요청합니다
-//     geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
-// }
+function searchAddrFromCoords(coords, callback) {
+    // 좌표로 행정동 주소 정보를 요청합니다
+    geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
+}
+
+function searchDetailAddrFromCoords(coords, callback) {
+    // 좌표로 법정동 상세 주소 정보를 요청합니다
+    geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+}
+
+function consolePrint(result, status){
+    if (status === kakao.maps.services.Status.OK) {
+        for(let i = 0; i < result.length; i++) {
+            // 행정동의 region_type 값은 'H' 이므로
+            if (result[i].region_type === 'H') {
+                console.log("consolePrint");
+                console.log(result[i].address_name);
+                break;
+            }
+        }
+    }
+}
+
+$('#weather_button').click(function(){
+    $("#info_text").removeClass("dis_none");
+
+    $("#no_data").addClass("dis_none");
+    $("#no_data1").addClass("dis_none");
+    $("#no_data2").addClass("dis_none");
+    $("#weather_button").addClass("dis_none");
+});
 

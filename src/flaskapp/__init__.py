@@ -48,6 +48,7 @@ elif not app.debug and not app.testing:
     app.config['SSL_MODE'] = True
     csp = {
         'default-src': ["'self'",
+                        "https://dapi.kakao.com/v2/local/geo/",
                         ],
         'img-src': ["'self'  data:",
                     "https://i1.daumcdn.net/",
@@ -68,6 +69,7 @@ elif not app.debug and not app.testing:
                        "https://t1.daumcdn.net/mapjsapi/js/main/4.2.0/kakao.js",
                        "https://t1.daumcdn.net/mapjsapi/js/libs/drawing/1.2.5/drawing.js",
                        "https://s1.daumcdn.net/svc/attach/U03/cssjs/mapapi/libs/",
+                       "https://dapi.kakao.com/v2/local/geo/",
                        ],
         'style-src': ["'self'",
                       "https://stackpath.bootstrapcdn.com/",  # bootstrap

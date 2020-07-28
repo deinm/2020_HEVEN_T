@@ -8371,3 +8371,7 @@ a[data-toggle="collapse"] {
 #navbarButton{
 	z-index: 4;
 }
+
+.whitetext{
+     color: white !important;
+}
