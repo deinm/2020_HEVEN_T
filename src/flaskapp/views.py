@@ -1,8 +1,10 @@
 from flaskapp import app
 from flask import render_template, request, jsonify
 from flaskapp import db
+from bs4 import BeautifulSoup
 
 import random
+import requests
 import pyrebase
 
 
@@ -52,7 +54,7 @@ def route_data():
             rain.append(db_sensor_datas[3])
 
     if not exists:
-        return jsonify({'none':''})
+        return jsonify({'none': ''})
 
     pos_sensor_datas['fine_dust'] = sum(fine_dust) / len(fine_dust)
     pos_sensor_datas['ultrafine_dust'] = sum(ultrafine_dust) / len(ultrafine_dust)
@@ -60,3 +62,32 @@ def route_data():
     pos_sensor_datas['rain'] = sum(rain) / len(rain)
 
     return jsonify(pos_sensor_datas)
+
+
+@app.route('/search_weather', methods=['POST'])
+def route_search_weather():
+    current_address = request.form.to_dict()
+    new_address = current_address['new_address'].split(' ')
+    old_address = current_address['old_address'].split(' ')
+
+    base_url = 'https://search.naver.com/search.naver?&query='
+    url = base_url + old_address[0] + old_address[1] + "날씨"
+    print(url)
+
+    html = requests.get(url).text
+    soup = BeautifulSoup(html, 'html.parser')
+
+    infos = soup.find("dl", {"class": "indicator"})
+    datas = infos.find_all("dd")
+
+    data_list = []
+    for data in datas:
+        data_list.append(data.text)
+
+    weather = soup.find("p", {"class": "cast_txt"})
+    weather_text = weather.text.split(',')[0]
+
+    data_dict = {'finedust': data_list[0], 'ultrafinedust': data_list[1],
+                    'uv': data_list[2], 'weather_text': weather_text}
+
+    return jsonify(data_dict)

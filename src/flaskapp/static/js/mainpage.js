@@ -1,8 +1,9 @@
 let map;
 let marker;
 let mapContainer;
-// let geocoder;
-geocoder = new kakao.maps.services.Geocoder();
+let geocoder = new kakao.maps.services.Geocoder();
+let newAddress = '';
+let oldAddress = '';
 
 $( document ).ready(function() {
 	mapContainer = document.getElementById('map'), // 지도를 표시할 div
@@ -43,13 +44,13 @@ $( document ).ready(function() {
 
                 $('#location').text(message);
 
-                searchAddrFromCoords(map.getCenter(), consolePrint);
-
+                /* 좌표로 주소 검색하 */
                 searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
                     if (status === kakao.maps.services.Status.OK) {
-                        console.log("searchDetailAddrFromCoords");
-                        console.log(result[0].road_address.address_name);
-                        console.log(result[0].address.address_name);
+                        if(detailAddr = !!result[0].road_address){
+                            newAddress = result[0].road_address.address_name;
+                        }
+                        oldAddress = result[0].address.address_name;
                     }
                 });
 
@@ -72,15 +73,7 @@ $( document ).ready(function() {
                         $("#no_data2").removeClass("dis_none");
                         $("#weather_button").removeClass("dis_none");
 
-                        $("#dust").addClass("dis_none");
-                        $("#dustText").addClass("dis_none");
-                        $("#ultradust").addClass("dis_none");
-                        $("#ultradustText").addClass("dis_none");
-                        $("#uv").addClass("dis_none");
-                        $("#uvText").addClass("dis_none");
-                        $("#rain").addClass("dis_none");
-                        $("#rainText").addClass("dis_none");
-                        $("#refresh").addClass("dis_none");
+                        deleteInfoDiv();
 
                         $('#no_data').text("🚘");
                         $('#no_data1').text("아직 데이터가 없어요.");
@@ -93,15 +86,7 @@ $( document ).ready(function() {
                     $("#no_data2").addClass("dis_none");
                     $("#weather_button").addClass("dis_none");
 
-                    $("#dust").removeClass("dis_none");
-                    $("#dustText").removeClass("dis_none");
-                    $("#ultradust").removeClass("dis_none");
-                    $("#ultradustText").removeClass("dis_none");
-                    $("#uv").removeClass("dis_none");
-                    $("#uvText").removeClass("dis_none");
-                    $("#rain").removeClass("dis_none");
-                    $("#rainText").removeClass("dis_none");
-                    $("#refresh").removeClass("dis_none");
+                    removeInfoDiv();
 
                     if(res['rain']>0.8){
                         $('#rainText').text("비가 오고 있어요.");
@@ -186,11 +171,6 @@ function displayMarker(locPosition, message) {
     map.setCenter(locPosition);
 }
 
-function searchAddrFromCoords(coords, callback) {
-    // 좌표로 행정동 주소 정보를 요청합니다
-    geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
-}
-
 function searchDetailAddrFromCoords(coords, callback) {
     // 좌표로 법정동 상세 주소 정보를 요청합니다
     geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
@@ -209,6 +189,52 @@ function consolePrint(result, status){
     }
 }
 
+function searchWeather(newAddress, oldAddress){
+    $.ajax({
+        type: "post",
+        url: "/search_weather",
+        data: {'new_address':newAddress, 'old_address':oldAddress},
+        dataType: "text"
+    }).done(function (result) {
+        let res = JSON.parse(result);
+        console.log(res);
+
+        removeInfoDiv();
+
+        $('#dustText').text(res['finedust']);
+        $('#ultradustText').text(res['ultrafinedust']);
+        $('#rainText').text(res['weather_text']);
+        $('#uvText').text(res['uv']);
+    })
+    .fail(function () {
+        console.log("오류 발생");
+    });
+}
+
+function removeInfoDiv(){
+    $("#dust").removeClass("dis_none");
+    $("#dustText").removeClass("dis_none");
+    $("#ultradust").removeClass("dis_none");
+    $("#ultradustText").removeClass("dis_none");
+    $("#uv").removeClass("dis_none");
+    $("#uvText").removeClass("dis_none");
+    $("#rain").removeClass("dis_none");
+    $("#rainText").removeClass("dis_none");
+    $("#refresh").removeClass("dis_none");
+}
+
+function deleteInfoDiv(){
+    $("#dust").addClass("dis_none");
+    $("#dustText").addClass("dis_none");
+    $("#ultradust").addClass("dis_none");
+    $("#ultradustText").addClass("dis_none");
+    $("#uv").addClass("dis_none");
+    $("#uvText").addClass("dis_none");
+    $("#rain").addClass("dis_none");
+    $("#rainText").addClass("dis_none");
+    $("#refresh").addClass("dis_none");
+}
+
 $('#weather_button').click(function(){
     $("#info_text").removeClass("dis_none");
 
@@ -216,5 +242,7 @@ $('#weather_button').click(function(){
     $("#no_data1").addClass("dis_none");
     $("#no_data2").addClass("dis_none");
     $("#weather_button").addClass("dis_none");
+
+    searchWeather(newAddress, oldAddress);
 });
 
