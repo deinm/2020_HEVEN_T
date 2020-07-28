@@ -14,6 +14,37 @@ $( document ).ready(function() {
 
 	// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
 	map = new kakao.maps.Map(mapContainer, mapOption);
+	/* -- 도로 검색해서 지도 위치로 이동하기 --*/
+    // 주소-좌표 변환 객체를 생성합니다
+    var geocoder = new kakao.maps.services.Geocoder();
+
+    var locate = document.userinput;
+
+    // 주소로 좌표를 검색합니다
+    geocoder.addressSearch( locate , function(result, status) {
+
+    // 정상적으로 검색이 완료됐으면
+     if (status === kakao.maps.services.Status.OK) {
+
+        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+        // 결과값으로 받은 위치를 마커로 표시합니다
+        var marker = new kakao.maps.Marker({
+            map: map,
+            position: coords
+        });
+
+        // 인포윈도우로 장소에 대한 설명을 표시합니다
+        var infowindow = new kakao.maps.InfoWindow({
+            content: '<div style="width:150px;text-align:center;padding:6px 0;">여기인가요?</div>'
+        });
+        infowindow.open(map, marker);
+
+        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+        map.setCenter(coords);
+    }
+});
+
 
     /* -- 현재 접속 위치 받아오기 --*/
     // HTML5의 geolocation으로 사용할 수 있는지 확인합니다
@@ -39,8 +70,8 @@ $( document ).ready(function() {
                 // 마커 위치를 클릭한 위치로 옮깁니다
                 marker.setPosition(latlng);
 
-                let message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
-                message += '경도는 ' + latlng.getLng() + ' 입니다';
+                let message = '클릭한 위치의 위도 : ' + latlng.getLat() + /n;
+                message += '경도 : ' + latlng.getLng() ;
 
                 $('#location').text(message);
 
