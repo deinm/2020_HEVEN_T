@@ -1,5 +1,8 @@
-let mapContainer;
 let map;
+let marker;
+let mapContainer;
+let geocoder;
+// geocoder = new kakao.maps.services.Geocoder();
 
 $( document ).ready(function() {
 	mapContainer = document.getElementById('map'), // 지도를 표시할 div
@@ -14,7 +17,6 @@ $( document ).ready(function() {
     /* -- 현재 접속 위치 받아오기 --*/
     // HTML5의 geolocation으로 사용할 수 있는지 확인합니다
     if (navigator.geolocation) {
-
         // GeoLocation을 이용해서 접속 위치를 얻어옵니다
         navigator.geolocation.getCurrentPosition(function(position) {
 
@@ -27,7 +29,133 @@ $( document ).ready(function() {
             // 마커와 인포윈도우를 표시합니다
             displayMarker(locPosition, message);
 
-          });
+            // 지도에 클릭 이벤트를 등록합니다
+            // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
+            kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+                // 클릭한 위도, 경도 정보를 가져옵니다
+                let latlng = mouseEvent.latLng;
+
+                // 마커 위치를 클릭한 위치로 옮깁니다
+                marker.setPosition(latlng);
+
+                let message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
+                message += '경도는 ' + latlng.getLng() + ' 입니다';
+
+                // 원그리기
+                // let circle = new kakao.maps.Circle({
+                //     center : new kakao.maps.LatLng(latlng.getLat(), latlng.getLng()),  // 원의 중심좌표 입니다
+                //     radius: 5, // 미터 단위의 원의 반지름입니다
+                //     strokeWeight: 3, // 선의 두께입니다
+                //     strokeColor: '#00a0e9', // 선의 색깔입니다
+                //     strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                //     strokeStyle: 'solid', // 선의 스타일 입니다
+                //     fillColor: '#00a0e9', // 채우기 색깔입니다
+                //     fillOpacity: 0.2  // 채우기 불투명도 입니다
+                // });
+                //
+                // circle.setMap(map);
+
+                $('#location').text(message);
+
+                $.ajax({
+                    type: "post",
+                    url: "/get_data",
+                    data: {'lat':latlng.getLat(), 'long':latlng.getLng()},
+                    dataType: "text"
+                }).done(function (result) {
+                    let res = JSON.parse(result);
+                    console.log(res);
+
+                    $("#describe").removeClass("dis_none");
+                    $("#describe1").removeClass("dis_none");
+
+                    if(res.hasOwnProperty('none')){
+                        $("#no_data").removeClass("dis_none");
+                        $("#no_data1").removeClass("dis_none");
+                        $("#no_data2").removeClass("dis_none");
+
+                        $("#dust").addClass("dis_none");
+                        $("#dustText").addClass("dis_none");
+                        $("#ultradust").addClass("dis_none");
+                        $("#ultradustText").addClass("dis_none");
+                        $("#uv").addClass("dis_none");
+                        $("#uvText").addClass("dis_none");
+                        $("#rain").addClass("dis_none");
+                        $("#rainText").addClass("dis_none");
+                        $("#refresh").addClass("dis_none");
+
+                        $('#no_data').text("🚘");
+                        $('#no_data1').text("아직 데이터가 없어요.");
+                        $('#no_data2').text("오늘은 이곳으로 드라이브를 떠나볼까요?");
+                        return;
+                    }
+
+                    $("#no_data").addClass("dis_none");
+                    $("#no_data1").addClass("dis_none");
+                    $("#no_data2").addClass("dis_none");
+
+                    $("#dust").removeClass("dis_none");
+                    $("#dustText").removeClass("dis_none");
+                    $("#ultradust").removeClass("dis_none");
+                    $("#ultradustText").removeClass("dis_none");
+                    $("#uv").removeClass("dis_none");
+                    $("#uvText").removeClass("dis_none");
+                    $("#rain").removeClass("dis_none");
+                    $("#rainText").removeClass("dis_none");
+                    $("#refresh").removeClass("dis_none");
+
+                    if(res['rain']>0.8){
+                        $('#rainText').text("비가 오고 있어요.");
+                    }else{
+                        $('#rainText').text("오늘은 날씨가 맑아요!");
+                    }
+
+                    if(res['fine_dust']<=30){
+                        $('#dustText').text("오늘은 미세먼지 수치가 좋아요!");
+                    }
+                    else if(res['fine_dust']<=80){
+                        $('#dustText').text("오늘은 미세먼지 수치가 보통이에요.");
+                    }
+                    else if(res['fine_dust']<=150){
+                        $('#dustText').text("오늘은 미세먼지 수치가 나빠요.");
+                    }
+                    else{
+                        $('#dustText').text("오늘은 미세먼지 수치가 매우 나빠요.");
+                    }
+
+                    if(res['ultrafine_dust']<=15){
+                        $('#ultradustText').text("오늘은 초미세먼지 수치가 좋아요!");
+                    }
+                    else if(res['ultrafine_dust']<=35){
+                        $('#ultradustText').text("오늘은 초미세먼지 수치가 보통이에요.");
+                    }
+                    else if(res['ultrafine_dust']<=75){
+                        $('#ultradustText').text("오늘은 초미세먼지 수치가 나빠요.");
+                    }
+                    else{
+                        $('#ultradustText').text("오늘은 초미세먼지 수치가 매우 나빠요.");
+                    }
+
+                    if(res['uv']<=2){
+                        $('#uvText').text("오늘은 자외선 지수가 낮아요!");
+                    }
+                    else if(res['ultrafine_dust']<=5){
+                        $('#uvText').text("오늘은 자외선 지수가 보통이에요.");
+                    }
+                    else if(res['ultrafine_dust']<=7){
+                        $('#uvText').text("오늘은 자외선 지수가 나빠요.");
+                    }
+                    else{
+                        $('#uvText').text("오늘은 자외선 지수가 매우 나빠요.");
+                    }
+                })
+                .fail(function () {
+                    console.log("오류 발생");
+               });
+
+            });
+
+        });
 
     } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
 
@@ -42,7 +170,7 @@ $( document ).ready(function() {
 function displayMarker(locPosition, message) {
 
     // 마커를 생성합니다
-    let marker = new kakao.maps.Marker({
+    marker = new kakao.maps.Marker({
         map: map,
         position: locPosition
     });
@@ -62,3 +190,14 @@ function displayMarker(locPosition, message) {
     // 지도 중심좌표를 접속위치로 변경합니다
     map.setCenter(locPosition);
 }
+
+// function searchAddrFromCoords(coords, callback) {
+//     // 좌표로 행정동 주소 정보를 요청합니다
+//     geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
+// }
+//
+// function searchDetailAddrFromCoords(coords, callback) {
+//     // 좌표로 법정동 상세 주소 정보를 요청합니다
+//     geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+// }
+

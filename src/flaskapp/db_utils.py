@@ -6,7 +6,7 @@ cred = credentials.Certificate('mykey.json')
 firebase_admin.initialize_app(cred,{'databaseURL':'https://heven-t.firebaseio.com/'})
 
 
-ref=db.reference()
+ref = db.reference()
 ref.update({'날씨' : 'good'})
 
 

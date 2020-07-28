@@ -1,9 +1,21 @@
 import os
 
+import pyrebase
 from flask import Flask
 from flask_session import Session
 from flask_talisman import Talisman
 from werkzeug.middleware.proxy_fix import ProxyFix
+
+config = {
+    "apiKey": "AIzaSyBrQ0-5F9LWQ40rYRXShRlXbodsDvo-Y58",
+    "authDomain": "heven-t.firebaseapp.com",
+    "databaseURL": "https://heven-t.firebaseio.com",
+    "projectId": "heven-t",
+    "storageBucket": "heven-t.appspot.com",
+    "messagingSenderId": "260591339216",
+    "appId": "1:260591339216:web:bfec4a353da018b7d880d5",
+    "measurementId": "G-WWBCTBTTL7"
+}
 
 
 # for security
@@ -15,6 +27,9 @@ class SecureFlask(Flask):
 
         return response
 
+
+firebase = pyrebase.initialize_app(config)
+db = firebase.database()
 
 # create app object
 app = SecureFlask(__name__)
@@ -51,6 +66,8 @@ elif not app.debug and not app.testing:
                        "https://www.gstatic.com/firebasejs/7.16.1/firebase-analytics.js",   # firebase analytics
                        "https://dapi.kakao.com/v2/maps/sdk.js",
                        "https://t1.daumcdn.net/mapjsapi/js/main/4.2.0/kakao.js",
+                       "https://t1.daumcdn.net/mapjsapi/js/libs/drawing/1.2.5/drawing.js",
+                       "https://s1.daumcdn.net/svc/attach/U03/cssjs/mapapi/libs/",
                        ],
         'style-src': ["'self'",
                       "https://stackpath.bootstrapcdn.com/",  # bootstrap
