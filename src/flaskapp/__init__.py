@@ -77,7 +77,9 @@ elif not app.debug and not app.testing:
                       ],
         'font-src': ["https://fonts.gstatic.com/",  # google web fonts (font files)
                      "https://stackpath.bootstrapcdn.com"
-                     ]
+                     ],
+        'media-src': ["'self'  data:",
+                      ],
     }
     Talisman(app,
              force_https=True,

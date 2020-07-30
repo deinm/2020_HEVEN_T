@@ -3,9 +3,14 @@ from flask import render_template, request, jsonify
 from flaskapp import db
 from bs4 import BeautifulSoup
 
+import os
+import sys
 import random
+import base64
 import requests
+
 import pyrebase
+import urllib
 
 
 @app.route('/')
@@ -88,6 +93,39 @@ def route_search_weather():
     weather_text = weather.text.split(',')[0]
 
     data_dict = {'finedust': data_list[0], 'ultrafinedust': data_list[1],
-                    'uv': data_list[2], 'weather_text': weather_text}
+                 'uv': data_list[2], 'weather_text': weather_text}
 
     return jsonify(data_dict)
+
+
+@app.route('/get_tts', methods=['POST'])
+def route_get_tts():
+    text_data = request.form.to_dict()
+    print(text_data)
+    text = text_data['text']
+
+    client_id = "l0q6tktoc2"
+    client_secret = "sQv86YFGJoJ6pxIcvjqskKHMWJzKk9opGzpyYAsa"
+    encode_text = urllib.parse.quote(text)
+
+    data = "speaker=jinho&speed=0&text=" + encode_text
+    url = "https://naveropenapi.apigw.ntruss.com/voice/v1/tts"
+    requested_data = urllib.request.Request(url)
+    requested_data.add_header("X-NCP-APIGW-API-KEY-ID", client_id)
+    requested_data.add_header("X-NCP-APIGW-API-KEY", client_secret)
+    response = urllib.request.urlopen(requested_data, data=data.encode('utf-8'))
+    rescode = response.getcode()
+
+    # filename = f'{text}.mp3'
+    if rescode == 200:
+        response_body = response.read()
+        mp3_file = base64.b64encode(response_body)
+        mp3_file_decode = mp3_file.decode('utf8')
+
+        # with open(filename, 'wb') as f:
+        #     f.write(response_body)
+        return jsonify({"success": mp3_file_decode})
+    else:
+        return jsonify({"error": str(rescode)})
+
+    return jsonify({"error": "not implemented"})
