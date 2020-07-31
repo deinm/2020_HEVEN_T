@@ -47,9 +47,11 @@
             </div>
 
             <ul class="list-unstyled components">
+                <div id="dustChartArea" class="dis_none">
+                    <canvas id="dustChart">브라우저에서 그래프를 지원하지 않아요. 크롬으로 다시 접속해 주세요.</canvas>
+                </div>
                 <li id="dust" class="active dis_none">
                     <a href="#"><span class="fa fa-meh-o mr-3"></span>미세먼지</a>
-
                 </li>
                 <div id="dustText" class="dis_none">
                 </div>
@@ -57,6 +59,9 @@
                     <a href="#"><span class="fa fa-frown-o mr-3"></span>초미세먼지</a>
                 </li>
                 <div id="ultradustText" class="dis_none">
+                </div>
+                <div id="uvChartArea" class="dis_none">
+                    <canvas id="uvChart">브라우저에서 그래프를 지원하지 않아요. 크롬으로 다시 접속해 주세요.</canvas>
                 </div>
                 <li id="uv" class="active dis_none">
                     <a href="#"><span class="fa fa-sun-o mr-3"></span>자외선</a>
@@ -118,6 +123,9 @@
 
 <!-- kakao library -->
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9b67f86357dd444b6b5dc6c002683c35&libraries=services,clusterer,drawing"></script>
+
+<!-- chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 
 <!-- our JS -->
 <script src="/static/js/base.js"></script>

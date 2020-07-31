@@ -70,6 +70,7 @@ elif not app.debug and not app.testing:
                        "https://t1.daumcdn.net/mapjsapi/js/libs/drawing/1.2.5/drawing.js",
                        "https://s1.daumcdn.net/svc/attach/U03/cssjs/mapapi/libs/",
                        "https://dapi.kakao.com/v2/local/geo/",
+                       "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js",
                        ],
         'style-src': ["'self'",
                       "https://stackpath.bootstrapcdn.com/",  # bootstrap

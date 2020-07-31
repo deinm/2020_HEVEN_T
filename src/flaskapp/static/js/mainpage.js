@@ -5,6 +5,8 @@ let geocoder = new kakao.maps.services.Geocoder();
 let newAddress = '';
 let oldAddress = '';
 
+Chart.defaults.global.defaultFontColor = 'white';
+
 $( document ).ready(function() {
 	mapContainer = document.getElementById('map'), // 지도를 표시할 div
 		mapOption = {
@@ -16,34 +18,27 @@ $( document ).ready(function() {
 	map = new kakao.maps.Map(mapContainer, mapOption);
 	/* -- 도로 검색해서 지도 위치로 이동하기 --*/
     // 주소-좌표 변환 객체를 생성합니다
-    var geocoder = new kakao.maps.services.Geocoder();
+    let geocoder = new kakao.maps.services.Geocoder();
 
-    var locate = document.userinput;
+    let locate = document.userinput;
 
     // 주소로 좌표를 검색합니다
     geocoder.addressSearch( locate , function(result, status) {
          // 정상적으로 검색이 완료됐으면
          if (status === kakao.maps.services.Status.OK) {
 
-            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+            let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
             // 결과값으로 받은 위치를 마커로 표시합니다
-            var marker = new kakao.maps.Marker({
+            let marker = new kakao.maps.Marker({
                 map: map,
                 position: coords
             });
-
-            // 인포윈도우로 장소에 대한 설명을 표시합니다
-            var infowindow = new kakao.maps.InfoWindow({
-                content: '<div style="width:150px;text-align:center;padding:6px 0;">여기인가요?</div>'
-            });
-            infowindow.open(map, marker);
 
             // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
             map.setCenter(coords);
         }
     });
-
 
     /* -- 현재 접속 위치 받아오기 --*/
     // HTML5의 geolocation으로 사용할 수 있는지 확인합니다
@@ -54,11 +49,10 @@ $( document ).ready(function() {
             let lat = position.coords.latitude, // 위도
                 lon = position.coords.longitude; // 경도
 
-            let locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
-                message = '<div style="padding:5px;">현재 위치</div>'; // 인포윈도우에 표시될 내용입니다
+            let locPosition = new kakao.maps.LatLng(lat, lon);// 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
 
             // 마커와 인포윈도우를 표시합니다
-            displayMarker(locPosition, message);
+            displayMarker(locPosition);
 
             // 지도에 클릭 이벤트를 등록합니다
             // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
@@ -74,7 +68,7 @@ $( document ).ready(function() {
 
                 $('#location').text(message);
 
-                /* 좌표로 주소 검색하 */
+                /* 좌표로 주소 검색하기 */
                 searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
                     if (status === kakao.maps.services.Status.OK) {
                         if(detailAddr = !!result[0].road_address){
@@ -126,28 +120,37 @@ $( document ).ready(function() {
 
                     if(res['fine_dust']<=30){
                         $('#dustText').text("오늘은 미세먼지 수치가 좋아요!");
+                        $('.fa-meh-o').css('color','#ffffff');
                     }
                     else if(res['fine_dust']<=80){
                         $('#dustText').text("오늘은 미세먼지 수치가 보통이에요.");
+                        $('.fa-meh-o').css('color','#FDD835');
                     }
                     else if(res['fine_dust']<=150){
                         $('#dustText').text("오늘은 미세먼지 수치가 나빠요.");
+                        $('.fa-meh-o').css('color','#FF5722');
                     }
                     else{
                         $('#dustText').text("오늘은 미세먼지 수치가 매우 나빠요.");
+                        $('.fa-meh-o').css('color','#DF1C44');
                     }
 
                     if(res['ultrafine_dust']<=15){
                         $('#ultradustText').text("오늘은 초미세먼지 수치가 좋아요!");
+                        $('.fa-frown-o').css('color','#ffffff');
                     }
                     else if(res['ultrafine_dust']<=35){
                         $('#ultradustText').text("오늘은 초미세먼지 수치가 보통이에요.");
+                        $('.fa-frown-o').css('color','#FDD835');
+                        // $('#ultradustText').css('color','#FDD835');
                     }
                     else if(res['ultrafine_dust']<=75){
                         $('#ultradustText').text("오늘은 초미세먼지 수치가 나빠요.");
+                        $('.fa-frown-o').css('color','#FF5722');
                     }
                     else{
                         $('#ultradustText').text("오늘은 초미세먼지 수치가 매우 나빠요.");
+                        $('.fa-frown-o').css('color','#DF1C44');
                     }
 
                     if(res['uv']<=2){
@@ -187,15 +190,6 @@ function displayMarker(locPosition, message) {
 
     let iwContent = message, // 인포윈도우에 표시할 내용
         iwRemoveable = true;
-
-    // 인포윈도우를 생성합니다
-    let infowindow = new kakao.maps.InfoWindow({
-        content : iwContent,
-        removable : iwRemoveable
-    });
-
-    // 인포윈도우를 마커위에 표시합니다
-    infowindow.open(map, marker);
 
     // 지도 중심좌표를 접속위치로 변경합니다
     map.setCenter(locPosition);
@@ -254,6 +248,8 @@ function removeInfoDiv(){
 }
 
 function deleteInfoDiv(){
+    $("#dustChartArea").addClass("dis_none");
+    $("#uvChartArea").addClass("dis_none");
     $("#dust").addClass("dis_none");
     $("#dustText").addClass("dis_none");
     $("#ultradust").addClass("dis_none");
@@ -266,8 +262,10 @@ function deleteInfoDiv(){
 }
 
 $('#weather_button').click(function(){
-    $("#info_text").removeClass("dis_none");
+    $("#dustChartArea").removeClass("dis_none");
+    $("#uvChartArea").removeClass("dis_none");
 
+    $("#info_text").removeClass("dis_none");
     $("#no_data").addClass("dis_none");
     $("#no_data1").addClass("dis_none");
     $("#no_data2").addClass("dis_none");
@@ -276,3 +274,107 @@ $('#weather_button').click(function(){
     searchWeather(newAddress, oldAddress);
 });
 
+
+// chart
+let dustChartElem = document.getElementById('dustChart').getContext('2d');
+let dustChart = new Chart(dustChartElem, {
+    type: 'line',
+    data: {
+        labels: [0, 1, 2, 3],
+        datasets: [{
+            label: '미세먼지',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: 'rgba(255, 99, 132, 1)',
+            data: [{x: 0, y: 1},
+                {x: 1, y: 2},
+                {x: 2, y: 3},
+                {x: 3, y: 2}],
+            fill: false,
+        },{
+            label: '초미세먼지',
+            borderColor: 'rgba(255, 206, 86, 1)',
+            backgroundColor: 'rgba(255, 206, 86, 1)',
+            data: [{x: 0, y: 1},
+                {x: 1, y: 2},
+                {x: 2, y: 1},
+                {x: 3, y: 0}],
+            fill: false,
+        }]
+    },
+    options: {
+        responsive: true,
+        tooltips: {
+            mode: 'index',
+            intersect: false,
+        },
+        legend: {
+            labels: {
+                // This more specific font property overrides the global property
+                fontColor: 'white'
+            }
+        }
+    }
+});
+
+
+let uvChartElem = document.getElementById('uvChart').getContext('2d');
+let uvChart = new Chart(uvChartElem, {
+    type: 'line',
+    data: {
+        labels: [0, 1, 2, 3],
+        datasets: [{
+            label: '자외선',
+            borderColor: 'rgba(255, 138, 101, 1)',
+            backgroundColor: 'rgba(255, 138, 101, 1)',
+            data: [{x: 0, y: 1},
+                {x: 1, y: 2},
+                {x: 2, y: 3},
+                {x: 3, y: 2}],
+            fill: false,
+        },{
+            label: '강우량',
+            borderColor: 'rgba(212, 225, 87, 1)',
+            backgroundColor: 'rgba(212, 225, 87, 1)',
+            data: [{x: 0, y: 1},
+                {x: 1, y: 3},
+                {x: 2, y: 2},
+                {x: 3, y: 1}],
+            fill: false,
+        }]
+    },
+    options: {
+        responsive: true,
+        tooltips: {
+            mode: 'index',
+            intersect: false,
+        },
+        legend: {
+            labels: {
+                // This more specific font property overrides the global property
+                fontColor: 'white'
+            }
+        },
+        scales: {
+            xAxes: [{
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: '시간'
+                },
+                ticks: {
+                    fontColor: 'white'
+                },
+            }],
+            yAxes: [{
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: '척도'
+                },
+                ticks: {
+                    fontColor: 'white'
+                },
+            }]
+        }
+    }
+});
