@@ -8,37 +8,14 @@ let oldAddress = '';
 Chart.defaults.global.defaultFontColor = 'white';
 
 $( document ).ready(function() {
-	mapContainer = document.getElementById('map'), // 지도를 표시할 div
-		mapOption = {
-			center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-			level: 3 // 지도의 확대 레벨
-		};
+    mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };
 
-	// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
-	map = new kakao.maps.Map(mapContainer, mapOption);
-	/* -- 도로 검색해서 지도 위치로 이동하기 --*/
-    // 주소-좌표 변환 객체를 생성합니다
-    let geocoder = new kakao.maps.services.Geocoder();
-
-    let locate = document.userinput;
-
-    // 주소로 좌표를 검색합니다
-    geocoder.addressSearch( locate , function(result, status) {
-         // 정상적으로 검색이 완료됐으면
-         if (status === kakao.maps.services.Status.OK) {
-
-            let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-            // 결과값으로 받은 위치를 마커로 표시합니다
-            let marker = new kakao.maps.Marker({
-                map: map,
-                position: coords
-            });
-
-            // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-            map.setCenter(coords);
-        }
-    });
+    // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+    map = new kakao.maps.Map(mapContainer, mapOption);
 
     /* -- 현재 접속 위치 받아오기 --*/
     // HTML5의 geolocation으로 사용할 수 있는지 확인합니다
@@ -402,3 +379,35 @@ let uvChart = new Chart(uvChartElem, {
         }
     }
 });
+
+
+/* -- 도로 검색해서 지도 위치로 이동하기 --*/
+$("#searchLoc").click(function () {
+    let keyword = $('#userInput').text();
+    console.log(keyword);
+
+    // 주소로 좌표를 검색합니다
+    geocoder.addressSearch(keyword, function(result, status){
+      // 정상적으로 검색이 완료됐으면
+     if (status === kakao.maps.services.Status.OK) {
+
+        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+        // 결과값으로 받은 위치를 마커로 표시합니다
+        var marker = new kakao.maps.Marker({
+            map: map,
+            position: coords
+        });
+
+        // 인포윈도우로 장소에 대한 설명을 표시합니다
+        var infowindow = new kakao.maps.InfoWindow({
+            content: '<div style="width:150px;text-align:center;padding:6px 0;">여기?</div>'
+        });
+        infowindow.open(map, marker);
+
+        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+        map.setCenter(coords);
+    }
+});
+    });
+

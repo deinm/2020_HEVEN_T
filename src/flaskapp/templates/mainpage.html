@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
+
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -29,7 +30,6 @@
         </div>
         <div class="p-4">
             <h1><a href="/main" class="logo">HEVEN_T</a></h1>
-
 
             <div id="no_data" class="txt_title25"></div>
             <div id="no_data1"></div>
@@ -82,11 +82,8 @@
             </div>
 	        <div class="mt-5 mb-5">
                 <h3 class="h6 mb-3">도로 검색하기</h3>
-                <form name="userinput" action="#" class="subscribe-form">
-	                <div class="form-group d-flex">
-                        <input type="text" class="form-control whitetext" placeholder="관평로">
-	                </div>
-	            </form>
+                <div contenteditable="true" id="userInput" class="form-control" placeholder="관평로"></div>
+                <button id="searchLoc" class="btn btn-light">search</button>
             </div>
             <div id="location">클릭한 위치 : </div>
         </div>

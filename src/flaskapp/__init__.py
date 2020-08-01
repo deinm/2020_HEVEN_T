@@ -49,6 +49,7 @@ elif not app.debug and not app.testing:
     csp = {
         'default-src': ["'self'",
                         "https://dapi.kakao.com/v2/local/geo/",
+                        "https://dapi.kakao.com/v2/local/search/",
                         ],
         'img-src': ["'self'  data:",
                     "https://i1.daumcdn.net/",
