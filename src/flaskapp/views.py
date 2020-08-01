@@ -3,6 +3,9 @@ from flask import render_template, request, jsonify
 from flaskapp import db
 from bs4 import BeautifulSoup
 
+from flaskapp import db_utils
+
+
 import os
 import sys
 import random
@@ -24,8 +27,8 @@ def route_hud():
     dust = random.randint(0, 200)
     uv = random.randint(0, 14)
     rain = random.randint(0, 1)
-    co2 = random.randint(0, 60)
-    return render_template("hud.html", dust=dust, uv=uv, rain=rain, co2=co2)
+    # co2 = random.randint(0, 60)
+    return render_template("hud.html", dust=dust, uv=uv, rain=rain, co2=db_utils.get_CO2(), lat=db_utils.get_lat(), lon=db_utils.get_lon(), cards=0)
 
 
 @app.route('/get_data', methods=['POST'])
