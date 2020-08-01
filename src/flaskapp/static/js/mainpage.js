@@ -16,7 +16,6 @@ $( document ).ready(function() {
 
     // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
     map = new kakao.maps.Map(mapContainer, mapOption);
-
     /* -- 현재 접속 위치 받아오기 --*/
     // HTML5의 geolocation으로 사용할 수 있는지 확인합니다
     if (navigator.geolocation) {
@@ -393,17 +392,12 @@ $("#searchLoc").click(function () {
 
         var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
+
         // 결과값으로 받은 위치를 마커로 표시합니다
         var marker = new kakao.maps.Marker({
             map: map,
             position: coords
         });
-
-        // 인포윈도우로 장소에 대한 설명을 표시합니다
-        var infowindow = new kakao.maps.InfoWindow({
-            content: '<div style="width:150px;text-align:center;padding:6px 0;">여기?</div>'
-        });
-        infowindow.open(map, marker);
 
         // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
         map.setCenter(coords);
