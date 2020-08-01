@@ -5,15 +5,14 @@ from bs4 import BeautifulSoup
 
 from flaskapp import db_utils
 
-
 import os
 import sys
+import urllib
 import random
 import base64
 import requests
 
 import pyrebase
-import urllib
 
 
 @app.route('/')
@@ -82,6 +81,7 @@ def route_search_weather():
     url = base_url + old_address[0] + old_address[1] + "날씨"
     print(url)
 
+    # 미세먼지, 초미세먼지
     html = requests.get(url).text
     soup = BeautifulSoup(html, 'html.parser')
 
@@ -90,13 +90,40 @@ def route_search_weather():
 
     data_list = []
     for data in datas:
-        data_list.append(data.text)
+        value = data.findAll("span")[0].text
+        text_value = data.text
+        data_list.append(f"{value}({text_value.replace(value, '')})")
 
     weather = soup.find("p", {"class": "cast_txt"})
     weather_text = weather.text.split(',')[0]
 
+    # 강수량
+    rain_url = base_url + old_address[0] + old_address[1] + "강수량"
+    rain_html = requests.get(rain_url).text
+    rain_soup = BeautifulSoup(rain_html, 'html.parser')
+
+    rain_area = rain_soup.find("div", {"class": "rainfall"})
+    rain_infos = rain_area.findAll("dd", {"class": "item_condition"})
+    rainfall = rain_infos[0].text
+
+    # 자외선
+    uv_url = base_url + old_address[0] + old_address[1] + "자외선"
+    uv_html = requests.get(uv_url).text
+    uv_soup = BeautifulSoup(uv_html, 'html.parser')
+
+    uv_total_area = uv_soup.find("div", {"class": "main_box"})
+    uv_info_list = uv_total_area.findAll("tr")
+
+    uv_info = 0
+    for uv_data in uv_info_list:
+        uv_data_text = uv_data.text
+        if old_address[0] in uv_data_text:
+            uv_detail = uv_data.findAll("span")
+            uv_info = f'{uv_detail[0].text}({uv_detail[1].text})'
+            break
+
     data_dict = {'finedust': data_list[0], 'ultrafinedust': data_list[1],
-                 'uv': data_list[2], 'weather_text': weather_text}
+                 'uv': uv_info, 'rain': rainfall+f"({weather_text})"}
 
     return jsonify(data_dict)
 

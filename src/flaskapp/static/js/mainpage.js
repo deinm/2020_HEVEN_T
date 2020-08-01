@@ -217,7 +217,7 @@ function searchWeather(newAddress, oldAddress){
 
         $('#dustText').text(res['finedust']);
         $('#ultradustText').text(res['ultrafinedust']);
-        $('#rainText').text(res['weather_text']);
+        $('#rainText').text(res['rain']);
         $('#uvText').text(res['uv']);
     })
     .fail(function () {
@@ -314,6 +314,28 @@ let dustChart = new Chart(dustChartElem, {
                 // This more specific font property overrides the global property
                 fontColor: 'white'
             }
+        },
+        scales: {
+            xAxes: [{
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: '시간'
+                },
+                ticks: {
+                    fontColor: 'white'
+                },
+            }],
+            yAxes: [{
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: '척도'
+                },
+                ticks: {
+                    fontColor: 'white'
+                },
+            }]
         }
     }
 });
