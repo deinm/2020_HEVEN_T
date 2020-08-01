@@ -110,6 +110,9 @@ $( document ).ready(function() {
                     $("#no_data2").addClass("dis_none");
                     $("#weather_button").addClass("dis_none");
 
+                    $("#dustChartArea").removeClass("dis_none");
+                    $("#uvChartArea").removeClass("dis_none");
+
                     removeInfoDiv();
 
                     if(res['rain']>0.8){
@@ -200,19 +203,6 @@ function searchDetailAddrFromCoords(coords, callback) {
     geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
 }
 
-function consolePrint(result, status){
-    if (status === kakao.maps.services.Status.OK) {
-        for(let i = 0; i < result.length; i++) {
-            // 행정동의 region_type 값은 'H' 이므로
-            if (result[i].region_type === 'H') {
-                console.log("consolePrint");
-                console.log(result[i].address_name);
-                break;
-            }
-        }
-    }
-}
-
 function searchWeather(newAddress, oldAddress){
     $.ajax({
         type: "post",
@@ -236,6 +226,8 @@ function searchWeather(newAddress, oldAddress){
 }
 
 function removeInfoDiv(){
+    $("#location_text").removeClass("dis_none");
+
     $("#dust").removeClass("dis_none");
     $("#dustText").removeClass("dis_none");
     $("#ultradust").removeClass("dis_none");
@@ -248,8 +240,11 @@ function removeInfoDiv(){
 }
 
 function deleteInfoDiv(){
+    $("#location_text").addClass("dis_none");
+
     $("#dustChartArea").addClass("dis_none");
     $("#uvChartArea").addClass("dis_none");
+
     $("#dust").addClass("dis_none");
     $("#dustText").addClass("dis_none");
     $("#ultradust").addClass("dis_none");
@@ -262,10 +257,17 @@ function deleteInfoDiv(){
 }
 
 $('#weather_button').click(function(){
-    $("#dustChartArea").removeClass("dis_none");
-    $("#uvChartArea").removeClass("dis_none");
+    // $("#dustChartArea").removeClass("dis_none");
+    // $("#uvChartArea").removeClass("dis_none");
 
     $("#info_text").removeClass("dis_none");
+
+    let currentAddress = oldAddress;
+    if(newAddress.length != 0) currentAddress = newAddress;
+    console.log(newAddress, oldAddress);
+    $("#location_text").removeClass("dis_none");
+    $("#location_text").text(currentAddress);
+
     $("#no_data").addClass("dis_none");
     $("#no_data1").addClass("dis_none");
     $("#no_data2").addClass("dis_none");
