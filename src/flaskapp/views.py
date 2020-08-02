@@ -24,12 +24,9 @@ def route_mainpage():
 
 @app.route('/hud')
 def route_hud():
-    dust = random.randint(0, 200)
-    uv = random.randint(0, 14)
-    rain = random.randint(0, 1)
-    # co2 = random.randint(0, 60)
-    return render_template("hud.html", dust=dust, uv=uv, rain=rain, co2=db_utils.get_CO2(), lat=db_utils.get_lat(),
-                           lon=db_utils.get_lon(), cards=0)
+    dust, uv, rain = db_utils.get_dust_uv_rain()
+
+    return render_template("hud.html", dust=dust, uv=uv, rain=rain, co2=db_utils.get_CO2(), lat=db_utils.get_lat(), lon=db_utils.get_lon(), cards=0)
 
 
 @app.route('/get_data', methods=['POST'])
