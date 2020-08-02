@@ -8380,3 +8380,8 @@ a[data-toggle="collapse"] {
 	width: 100%;
 	z-index: 10;
 }
+
+#userInput{
+	overflow: scroll;
+	font-size: medium;
+}

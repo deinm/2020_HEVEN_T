@@ -1,4 +1,5 @@
 let map;
+let markers = [];
 let marker;
 let mapContainer;
 let geocoder = new kakao.maps.services.Geocoder();
@@ -43,122 +44,8 @@ $( document ).ready(function() {
                 // 마커 위치를 클릭한 위치로 옮깁니다
                 marker.setPosition(latlng);
 
-                /* 좌표로 주소 검색하기 */
-                searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
-                    if (status === kakao.maps.services.Status.OK) {
-                        if(detailAddr = !!result[0].road_address){
-                            newAddress = result[0].road_address.address_name;
-                        }
-                        oldAddress = result[0].address.address_name;
-                    }
-                });
-
-                $.ajax({
-                    type: "post",
-                    url: "/get_data",
-                    data: {'lat':latlng.getLat(), 'long':latlng.getLng()},
-                    dataType: "text"
-                }).done(function (result) {
-                    let res = JSON.parse(result);
-                    console.log(res);
-
-                    $("#describe").addClass("dis_none");
-                    $("#describe1").addClass("dis_none");
-                    $("#info_text").addClass("dis_none");
-
-                    if(res.hasOwnProperty('none')){
-                        $("#no_data").removeClass("dis_none");
-                        $("#no_data1").removeClass("dis_none");
-                        $("#no_data2").removeClass("dis_none");
-                        $("#weather_button").removeClass("dis_none");
-
-                        deleteInfoDiv();
-
-                        $('#no_data').text("🚘");
-                        $('#no_data1').text("아직 데이터가 없어요.");
-                        $('#no_data2').text("오늘은 이곳으로 떠나볼까요?");
-                        return;
-                    }
-
-                    showLocation();
-
-                    $("#no_data").addClass("dis_none");
-                    $("#no_data1").addClass("dis_none");
-                    $("#no_data2").addClass("dis_none");
-                    $("#weather_button").addClass("dis_none");
-
-                    $("#dustChartArea").removeClass("dis_none");
-                    $("#uvChartArea").removeClass("dis_none");
-
-                    removeInfoDiv();
-
-                    let finedustText = res['fine_dust'];
-                    let ultradustText = res['ultrafine_dust'];
-                    let uvText = res['uv'];
-                    let rainText = res['rain'];
-
-                    if(res['rain']>0.8){
-                        rainText += "(비)";
-                    }else{
-                        rainText += "";
-                    }
-
-                    if(res['fine_dust']<=30){
-                        finedustText += "(좋음)";
-                        $('.fa-meh-o').css('color','#ffffff');
-                    }
-                    else if(res['fine_dust']<=80){
-                        finedustText += "(보통)";
-                        $('.fa-meh-o').css('color','#FDD835');
-                    }
-                    else if(res['fine_dust']<=150){
-                        finedustText += "(나쁨)";
-                        $('.fa-meh-o').css('color','#FF5722');
-                    }
-                    else{
-                        finedustText += "(매우나쁨)";
-                        $('.fa-meh-o').css('color','#DF1C44');
-                    }
-
-                    if(res['ultrafine_dust']<=15){
-                        ultradustText += "(좋음)";
-                        $('.fa-frown-o').css('color','#ffffff');
-                    }
-                    else if(res['ultrafine_dust']<=35){
-                        ultradustText += "(보통)";
-                        $('.fa-frown-o').css('color','#FDD835');
-                        // $('#ultradustText').css('color','#FDD835');
-                    }
-                    else if(res['ultrafine_dust']<=75){
-                        ultradustText += "(나쁨)";
-                        $('.fa-frown-o').css('color','#FF5722');
-                    }
-                    else{
-                        ultradustText += "(매우나쁨)";
-                        $('.fa-frown-o').css('color','#DF1C44');
-                    }
-
-                    if(res['uv']<=2){
-                        uvText += "(좋음)";
-                    }
-                    else if(res['ultrafine_dust']<=5){
-                        uvText += "(보통)";
-                    }
-                    else if(res['ultrafine_dust']<=7){
-                        uvText += "(나쁨)";
-                    }
-                    else{
-                        uvText += "(매우나쁨)";
-                    }
-
-                    $('#dustText').text(finedustText);
-                    $('#ultradustText').text(ultradustText);
-                    $('#uvText').text(uvText);
-                    $('#rainText').text(rainText);
-                })
-                .fail(function () {
-                    console.log("오류 발생");
-               });
+                // sidebar 정보 보여주기
+                searchInfo(mouseEvent.latLng);
             });
         });
     }
@@ -171,12 +58,14 @@ $( document ).ready(function() {
 
 // 지도에 마커와 인포윈도우를 표시하는 함수입니다
 function displayMarker(locPosition, message) {
+    hideMarkers();
 
     // 마커를 생성합니다
     marker = new kakao.maps.Marker({
         map: map,
         position: locPosition
     });
+    markers.push(marker);
 
     let iwContent = message, // 인포윈도우에 표시할 내용
         iwRemoveable = true;
@@ -198,7 +87,6 @@ function searchWeather(newAddress, oldAddress){
         dataType: "text"
     }).done(function (result) {
         let res = JSON.parse(result);
-        console.log(res);
 
         removeInfoDiv();
 
@@ -405,33 +293,139 @@ $(document).ready(function() {
 
 /* -- 도로 검색해서 지도 위치로 이동하기 --*/
 $("#searchLoc").click(function () {
-
     let keyword = $('#userInput').text();
-    console.log(keyword);
 
     // 주소로 좌표를 검색합니다
-    geocoder.addressSearch(keyword, function(result, status){
+    geocoder.addressSearch(keyword, function(result, status) {
+        // 정상적으로 검색이 완료됐으면
+        if (status === kakao.maps.services.Status.OK) {
+            // 현재 위도 및 경도
+            let latlng = new kakao.maps.LatLng(result[0].y, result[0].x);
+            searchInfo(latlng);
 
-      // 정상적으로 검색이 완료됐으면
-     if (status === kakao.maps.services.Status.OK) {
-        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+            // 마커 표시
+            displayMarker(latlng);
 
-        // 결과값으로 받은 위치를 마커로 표시합니다
-        var marker = new kakao.maps.Marker({
-            map: map,
-            position: coords
-        });
-
-        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-        map.setCenter(coords);
-    }
-     // 검색이 안되는 경우
-     else if (status === kakao.maps.services.Status.ZERO_RESULT){
-         alert('검색 결과가 존재하지 않습니다.');
-         return;
-     }
-
-
-});
+            // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+            map.setCenter(latlng);
+        }
     });
+});
+
+
+function searchInfo(location){
+    // 위치 관련 정보를 sidebar에 표시
+    /* 좌표로 주소 검색하기 */
+    searchDetailAddrFromCoords(location, function (result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+            if (detailAddr = !!result[0].road_address) {
+                newAddress = result[0].road_address.address_name;
+            }
+            oldAddress = result[0].address.address_name;
+        }
+    });
+
+    $.ajax({
+        type: "post",
+        url: "/get_data",
+        data: {'lat': location.getLat(), 'long': location.getLng()},
+        dataType: "text"
+    }).done(function (result) {
+        let res = JSON.parse(result);
+
+        $("#describe").addClass("dis_none");
+        $("#describe1").addClass("dis_none");
+        $("#info_text").addClass("dis_none");
+
+        if (res.hasOwnProperty('none')) {
+            $("#no_data").removeClass("dis_none");
+            $("#no_data1").removeClass("dis_none");
+            $("#no_data2").removeClass("dis_none");
+            $("#weather_button").removeClass("dis_none");
+
+            deleteInfoDiv();
+
+            $('#no_data').text("🚘");
+            $('#no_data1').text("아직 데이터가 없어요.");
+            $('#no_data2').text("오늘은 이곳으로 떠나볼까요?");
+            return;
+        }
+
+        showLocation();
+
+        $("#no_data").addClass("dis_none");
+        $("#no_data1").addClass("dis_none");
+        $("#no_data2").addClass("dis_none");
+        $("#weather_button").addClass("dis_none");
+
+        $("#dustChartArea").removeClass("dis_none");
+        $("#uvChartArea").removeClass("dis_none");
+
+        removeInfoDiv();
+
+        let finedustText = res['fine_dust'];
+        let ultradustText = res['ultrafine_dust'];
+        let uvText = res['uv'];
+        let rainText = res['rain'];
+
+        if (res['rain'] > 0.8) {
+            rainText += "(비)";
+        } else {
+            rainText += "";
+        }
+
+        if (res['fine_dust'] <= 30) {
+            finedustText += "(좋음)";
+            $('.fa-meh-o').css('color', '#ffffff');
+        } else if (res['fine_dust'] <= 80) {
+            finedustText += "(보통)";
+            $('.fa-meh-o').css('color', '#FDD835');
+        } else if (res['fine_dust'] <= 150) {
+            finedustText += "(나쁨)";
+            $('.fa-meh-o').css('color', '#FF5722');
+        } else {
+            finedustText += "(매우나쁨)";
+            $('.fa-meh-o').css('color', '#DF1C44');
+        }
+
+        if (res['ultrafine_dust'] <= 15) {
+            ultradustText += "(좋음)";
+            $('.fa-frown-o').css('color', '#ffffff');
+        } else if (res['ultrafine_dust'] <= 35) {
+            ultradustText += "(보통)";
+            $('.fa-frown-o').css('color', '#FDD835');
+            // $('#ultradustText').css('color','#FDD835');
+        } else if (res['ultrafine_dust'] <= 75) {
+            ultradustText += "(나쁨)";
+            $('.fa-frown-o').css('color', '#FF5722');
+        } else {
+            ultradustText += "(매우나쁨)";
+            $('.fa-frown-o').css('color', '#DF1C44');
+        }
+
+        if (res['uv'] <= 2) {
+            uvText += "(좋음)";
+        } else if (res['ultrafine_dust'] <= 5) {
+            uvText += "(보통)";
+        } else if (res['ultrafine_dust'] <= 7) {
+            uvText += "(나쁨)";
+        } else {
+            uvText += "(매우나쁨)";
+        }
+
+        $('#dustText').text(finedustText);
+        $('#ultradustText').text(ultradustText);
+        $('#uvText').text(uvText);
+        $('#rainText').text(rainText);
+    })
+    .fail(function () {
+        console.log("오류 발생");
+    });
+}
+
+function hideMarkers() {
+    for (let i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+    }
+}
 
