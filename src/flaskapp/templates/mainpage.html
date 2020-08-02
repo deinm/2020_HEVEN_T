@@ -74,13 +74,15 @@
             </div>
 	        <div class="mt-5 mb-5">
                 <h3 class="h6 mb-3">도로 검색하기</h3>
-                <div contenteditable="true" id="userInput" class="form-control disableEnter">
+                <div class="inputWrapper">
+                    <div class="input-group">
+                        <div contenteditable="true" id="userInput" class="form-control disableEnter"></div>
+                        <button id="searchLoc" class="btn btn-light">search</button>
+                    </div>
                 </div>
-                <button id="searchLoc" class="btn btn-light">search</button>
             </div>
         </div>
     </nav>
-
     <!-- Page Content  -->
     <div id="content">
         <div id="map"></div>
