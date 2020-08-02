@@ -1,4 +1,5 @@
 from flaskapp import db
+import datetime
 
 
 def get_CO2(carname="12가3456"):
@@ -33,11 +34,17 @@ def get_dust_uv_rain():
     rain = []
     exists = False
 
+    hours_added = datetime.timedelta(hours=9)
+    current_time = datetime.datetime.now() + hours_added
+    current_time_formatted = current_time.strftime('%Y.%-m.%-d.%H.%-M')
+    current_time_list = current_time_formatted.split('.')
+
     for key, value in gps_datas.items():
         lat, long, time = key.replace('_', ".").split(',')
         lat = float(lat)
         long = float(long)
-        if abs(current_lat - lat) < 0.0005 and abs(current_lon - long) < 0.0005:
+        db_time_list = time.split('.')
+        if abs(current_lat - lat) < 0.0005 and abs(current_lon - long) < 0.0005 and current_time_list[:3] == db_time_list[:3] and abs(int(current_time_list[3]) - int(db_time_list[3])) <= 3:
             exists = True
             db_sensor_datas = value['data']
             dust.append(db_sensor_datas[0])
