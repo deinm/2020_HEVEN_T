@@ -36,14 +36,23 @@ def route_hud():
 def route_data():
     # {'lat': '37.38541126992877', 'long': '126.96375354884748'}
     current_pos = request.form.to_dict()
-    current_lat = float(current_pos['lat'])
-    current_long = float(current_pos['long'])
+    if len(current_pos) != 0:
+        current_lat = float(current_pos['lat'])
+        current_long = float(current_pos['long'])
+    else:
+        current_lat = float(db_utils.get_lat())
+        current_long = float(db_utils.get_lon())
 
     gps_datas = dict(db.child("gps").get().val())
 
     # +- 0.0005
     # 미세먼지 / 초미세먼지 / 자외선 / 강우
     pos_sensor_datas = {}
+
+    pos_sensor_datas["lat"] = current_lat
+    pos_sensor_datas["long"] = current_long
+    pos_sensor_datas["co2"] = db_utils.get_CO2()
+
     fine_dust = []
     ultrafine_dust = []
     uv = []
@@ -55,8 +64,6 @@ def route_data():
     current_time_formatted = current_time.strftime('%Y.%-m.%-d.%H.%-M')
     current_time_list = current_time_formatted.split('.')
 
-    print(current_time_list)
-
     for key, value in gps_datas.items():
         lat, long, time = key.replace('_', ".").split(',')
         lat = float(lat)
@@ -67,13 +74,16 @@ def route_data():
         if (abs(current_lat - lat) < 0.0005 and abs(current_long - long) < 0.0005) and current_time_list[:2] == db_time_list[:2] and abs(int(current_time_list[3]) - int(db_time_list[3])) <= 3:
             exists = True
             db_sensor_datas = value['data']
+            if db_sensor_datas[0] > 100:
+                print(db_sensor_datas[0])
             fine_dust.append(db_sensor_datas[0])
             ultrafine_dust.append(db_sensor_datas[1])
             uv.append(db_sensor_datas[2])
             rain.append(db_sensor_datas[3])
 
     if not exists:
-        return jsonify({'none': ''})
+        pos_sensor_datas['none'] = True
+        return jsonify(pos_sensor_datas)
 
     pos_sensor_datas['fine_dust'] = int(sum(fine_dust) / len(fine_dust))
     pos_sensor_datas['ultrafine_dust'] = int(sum(ultrafine_dust) / len(ultrafine_dust))
@@ -143,7 +153,6 @@ def route_search_weather():
 @app.route('/get_tts', methods=['POST'])
 def route_get_tts():
     text_data = request.form.to_dict()
-    print(text_data)
     text = text_data['text']
 
     client_id = "l0q6tktoc2"

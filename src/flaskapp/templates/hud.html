@@ -19,17 +19,6 @@
     <title>HEVEN_T</title>
   </head>
 <body>
-
-
-    <div class="container">
-    <div class="row h-100">
-        <div class="txt_con15 txt_black txt_bold ">
-            현재위치 : 위도 {{ lat }} 경도 {{ lon }}
-        </div>
-    </div>
-    </div>
-
-
     <div class="container">
 
     <div class="row h-100">
@@ -55,8 +44,7 @@
                 {% endif %}
             >
             <div class="card-body">
-                <h4 class="card-title">미세먼지 : {{ dust }}</h4>
-                <p id="dusttext" class="card-text"></p>
+                <h4 class="card-title" id="dusttext">미세먼지 : {{ dust }}</h4>
             </div>
         </div>
     </div>
@@ -74,8 +62,7 @@
             {% endif %}
             >
             <div class="card-body">
-                <h4 class="card-title">자외선 : {{ uv }}</h4>
-                <p id="uvtext" class="card-text">자외선</p>
+                <h4 class="card-title" id="uvtext">자외선 : {{ uv }}</h4>
             </div>
         </div>
     </div>
@@ -86,8 +73,7 @@
         <div class="card h-100 space_300">
             <img class="card-img-top" src="/static/image/rain.png" alt="">
             <div class="card-body">
-                <h4 class="card-title">강우량 : {{ rain }}</h4>
-                <p id="raintext" class="card-text">강우량</p>
+                <h4 class="card-title" id="raintext">강우량 : {{ rain }}</h4>
             </div>
         </div>
     </div>
@@ -98,8 +84,7 @@
         <div class="card h-100 space_300">
             <img class="card-img-top" src="/static/image/CO2.png" alt="">
             <div class="card-body">
-                <h4 class="card-title">CO2 : {{ co2 }}</h4>
-                <p id="co2text" class="card-text">co2</p>
+                <h4 class="card-title" id="co2text">CO₂ : {{ co2 }}</h4>
             </div>
         </div>
 
