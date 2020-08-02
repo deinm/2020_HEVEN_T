@@ -394,19 +394,27 @@ let uvChart = new Chart(uvChartElem, {
     }
 });
 
+// disable enter key in modal
+$(document).ready(function() {
+    $('.disableEnter').keypress(function(event) {
+        if(event.keyCode == 13) {
+            event.preventDefault();
+        }
+    });
+});
 
 /* -- 도로 검색해서 지도 위치로 이동하기 --*/
 $("#searchLoc").click(function () {
+
     let keyword = $('#userInput').text();
     console.log(keyword);
 
     // 주소로 좌표를 검색합니다
     geocoder.addressSearch(keyword, function(result, status){
+
       // 정상적으로 검색이 완료됐으면
      if (status === kakao.maps.services.Status.OK) {
-
         var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
 
         // 결과값으로 받은 위치를 마커로 표시합니다
         var marker = new kakao.maps.Marker({
@@ -417,6 +425,13 @@ $("#searchLoc").click(function () {
         // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
         map.setCenter(coords);
     }
+     // 검색이 안되는 경우
+     else if (status === kakao.maps.services.Status.ZERO_RESULT){
+         alert('검색 결과가 존재하지 않습니다.');
+         return;
+     }
+
+
 });
     });
 
