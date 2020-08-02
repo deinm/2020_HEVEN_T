@@ -57,25 +57,17 @@
                     <canvas id="uvChart">브라우저에서 그래프를 지원하지 않아요. 크롬으로 다시 접속해 주세요.</canvas>
                 </div>
                 <li id="dust" class="active dis_none">
-                    <a href="#"><span class="fa fa-meh-o mr-3"></span>미세먼지</a>
+                    <a><span class="fa fa-meh-o mr-2"></span>미세먼지 : <span id="dustText"></span></a>
                 </li>
-                <div id="dustText" class="dis_none">
-                </div>
                 <li id="ultradust" class="active dis_none">
-                    <a href="#"><span class="fa fa-frown-o mr-3"></span>초미세먼지</a>
+                    <a href="#"><span class="fa fa-frown-o mr-2"></span>초미세먼지 : <span id="ultradustText"></span></a>
                 </li>
-                <div id="ultradustText" class="dis_none">
-                </div>
                 <li id="uv" class="active dis_none">
-                    <a href="#"><span class="fa fa-sun-o mr-3"></span>자외선</a>
+                    <a href="#"><span class="fa fa-sun-o mr-2"></span>자외선 : <span id="uvText"></span></a>
                 </li>
-                <div id="uvText" class="dis_none">
-                </div>
                 <li id="rain" class="active dis_none">
-                    <a href="#"><span class="fa fa-umbrella mr-3"></span>강우량</a>
+                    <a href="#"><span class="fa fa-umbrella mr-2"></span>강우량 : <span id="rainText"></span></a>
                 </li>
-                <div id="rainText" class="dis_none">
-                </div>
             </ul>
             <div id="refresh" class="txt_con08 dis-none">
                 <i class="fa fa-refresh fa-spin fa-1x fa-fw"></i> 데이터를 실시간으로 갱신하고 있어요.
@@ -85,18 +77,12 @@
                 <div contenteditable="true" id="userInput" class="form-control" placeholder="관평로"></div>
                 <button id="searchLoc" class="btn btn-light">search</button>
             </div>
-            <div id="location">클릭한 위치 : </div>
         </div>
     </nav>
 
     <!-- Page Content  -->
     <div id="content">
-        <div class="row">
-            <div class="col-12">
-                <!-- 지도를 표시할 div 입니다 -->
-                <div id="map"></div>
-            </div>
-        </div>
+        <div id="map"></div>
         <a href="/hud" id="convertHud" class="float">
             <i class="fa fa-car my-float"></i>
         </a>

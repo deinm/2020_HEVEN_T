@@ -8,6 +8,10 @@ let oldAddress = '';
 Chart.defaults.global.defaultFontColor = 'white';
 
 $( document ).ready(function() {
+    $("#map").css("height", $(window).height()+"px");
+    // $("#map").css("height", "100%");
+    // $("#map").css("width", $(window).width()+"px");
+
     mapContainer = document.getElementById('map'), // 지도를 표시할 div
         mapOption = {
             center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
@@ -38,11 +42,6 @@ $( document ).ready(function() {
 
                 // 마커 위치를 클릭한 위치로 옮깁니다
                 marker.setPosition(latlng);
-
-                let message = '클릭한 위치의 위도 : ' + latlng.getLat();
-                message += '경도 : ' + latlng.getLng();
-
-                $('#location').text(message);
 
                 /* 좌표로 주소 검색하기 */
                 searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
@@ -81,6 +80,8 @@ $( document ).ready(function() {
                         return;
                     }
 
+                    showLocation();
+
                     $("#no_data").addClass("dis_none");
                     $("#no_data1").addClass("dis_none");
                     $("#no_data2").addClass("dis_none");
@@ -91,59 +92,69 @@ $( document ).ready(function() {
 
                     removeInfoDiv();
 
+                    let finedustText = res['fine_dust'];
+                    let ultradustText = res['ultrafine_dust'];
+                    let uvText = res['uv'];
+                    let rainText = res['rain'];
+
                     if(res['rain']>0.8){
-                        $('#rainText').text("비가 오고 있어요.");
+                        rainText += "(비)";
                     }else{
-                        $('#rainText').text("오늘은 날씨가 맑아요!");
+                        rainText += "";
                     }
 
                     if(res['fine_dust']<=30){
-                        $('#dustText').text("오늘은 미세먼지 수치가 좋아요!");
+                        finedustText += "(좋음)";
                         $('.fa-meh-o').css('color','#ffffff');
                     }
                     else if(res['fine_dust']<=80){
-                        $('#dustText').text("오늘은 미세먼지 수치가 보통이에요.");
+                        finedustText += "(보통)";
                         $('.fa-meh-o').css('color','#FDD835');
                     }
                     else if(res['fine_dust']<=150){
-                        $('#dustText').text("오늘은 미세먼지 수치가 나빠요.");
+                        finedustText += "(나쁨)";
                         $('.fa-meh-o').css('color','#FF5722');
                     }
                     else{
-                        $('#dustText').text("오늘은 미세먼지 수치가 매우 나빠요.");
+                        finedustText += "(매우나쁨)";
                         $('.fa-meh-o').css('color','#DF1C44');
                     }
 
                     if(res['ultrafine_dust']<=15){
-                        $('#ultradustText').text("오늘은 초미세먼지 수치가 좋아요!");
+                        ultradustText += "(좋음)";
                         $('.fa-frown-o').css('color','#ffffff');
                     }
                     else if(res['ultrafine_dust']<=35){
-                        $('#ultradustText').text("오늘은 초미세먼지 수치가 보통이에요.");
+                        ultradustText += "(보통)";
                         $('.fa-frown-o').css('color','#FDD835');
                         // $('#ultradustText').css('color','#FDD835');
                     }
                     else if(res['ultrafine_dust']<=75){
-                        $('#ultradustText').text("오늘은 초미세먼지 수치가 나빠요.");
+                        ultradustText += "(나쁨)";
                         $('.fa-frown-o').css('color','#FF5722');
                     }
                     else{
-                        $('#ultradustText').text("오늘은 초미세먼지 수치가 매우 나빠요.");
+                        ultradustText += "(매우나쁨)";
                         $('.fa-frown-o').css('color','#DF1C44');
                     }
 
                     if(res['uv']<=2){
-                        $('#uvText').text("오늘은 자외선 지수가 낮아요!");
+                        uvText += "(좋음)";
                     }
                     else if(res['ultrafine_dust']<=5){
-                        $('#uvText').text("오늘은 자외선 지수가 보통이에요.");
+                        uvText += "(보통)";
                     }
                     else if(res['ultrafine_dust']<=7){
-                        $('#uvText').text("오늘은 자외선 지수가 나빠요.");
+                        uvText += "(나쁨)";
                     }
                     else{
-                        $('#uvText').text("오늘은 자외선 지수가 매우 나빠요.");
+                        uvText += "(매우나쁨)";
                     }
+
+                    $('#dustText').text(finedustText);
+                    $('#ultradustText').text(ultradustText);
+                    $('#uvText').text(uvText);
+                    $('#rainText').text(rainText);
                 })
                 .fail(function () {
                     console.log("오류 발생");
@@ -232,17 +243,21 @@ function deleteInfoDiv(){
     $("#refresh").addClass("dis_none");
 }
 
+function showLocation(){
+    let currentAddress = oldAddress;
+    if(newAddress.length != 0) currentAddress = newAddress;
+
+    $("#location_text").removeClass("dis_none");
+    $("#location_text").text(currentAddress);
+}
+
 $('#weather_button').click(function(){
     // $("#dustChartArea").removeClass("dis_none");
     // $("#uvChartArea").removeClass("dis_none");
 
     $("#info_text").removeClass("dis_none");
 
-    let currentAddress = oldAddress;
-    if(newAddress.length != 0) currentAddress = newAddress;
-    console.log(newAddress, oldAddress);
-    $("#location_text").removeClass("dis_none");
-    $("#location_text").text(currentAddress);
+    showLocation();
 
     $("#no_data").addClass("dis_none");
     $("#no_data1").addClass("dis_none");

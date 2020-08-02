@@ -11,6 +11,7 @@ import urllib
 import random
 import base64
 import requests
+import datetime
 
 import pyrebase
 
@@ -27,7 +28,8 @@ def route_hud():
     uv = random.randint(0, 14)
     rain = random.randint(0, 1)
     # co2 = random.randint(0, 60)
-    return render_template("hud.html", dust=dust, uv=uv, rain=rain, co2=db_utils.get_CO2(), lat=db_utils.get_lat(), lon=db_utils.get_lon(), cards=0)
+    return render_template("hud.html", dust=dust, uv=uv, rain=rain, co2=db_utils.get_CO2(), lat=db_utils.get_lat(),
+                           lon=db_utils.get_lon(), cards=0)
 
 
 @app.route('/get_data', methods=['POST'])
@@ -48,11 +50,21 @@ def route_data():
     rain = []
     exists = False
 
+    hours_added = datetime.timedelta(hours=9)
+    current_time = datetime.datetime.now() + hours_added
+    current_time_formatted = current_time.strftime('%Y.%-m.%-d.%H.%-M')
+    current_time_list = current_time_formatted.split('.')
+
+    print(current_time_list)
+
     for key, value in gps_datas.items():
         lat, long, time = key.replace('_', ".").split(',')
         lat = float(lat)
         long = float(long)
-        if abs(current_lat - lat) < 0.0005 and abs(current_long - long) < 0.0005:
+
+        db_time_list = time.split('.')
+
+        if (abs(current_lat - lat) < 0.0005 and abs(current_long - long) < 0.0005) and current_time_list[:2] == db_time_list[:2] and abs(int(current_time_list[3]) - int(db_time_list[3])) <= 3:
             exists = True
             db_sensor_datas = value['data']
             fine_dust.append(db_sensor_datas[0])
@@ -63,10 +75,10 @@ def route_data():
     if not exists:
         return jsonify({'none': ''})
 
-    pos_sensor_datas['fine_dust'] = sum(fine_dust) / len(fine_dust)
-    pos_sensor_datas['ultrafine_dust'] = sum(ultrafine_dust) / len(ultrafine_dust)
-    pos_sensor_datas['uv'] = sum(uv) / len(uv)
-    pos_sensor_datas['rain'] = sum(rain) / len(rain)
+    pos_sensor_datas['fine_dust'] = int(sum(fine_dust) / len(fine_dust))
+    pos_sensor_datas['ultrafine_dust'] = int(sum(ultrafine_dust) / len(ultrafine_dust))
+    pos_sensor_datas['uv'] = int(sum(uv) / len(uv))
+    pos_sensor_datas['rain'] = round(sum(rain) / len(rain), 2)
 
     return jsonify(pos_sensor_datas)
 
@@ -123,7 +135,7 @@ def route_search_weather():
             break
 
     data_dict = {'finedust': data_list[0], 'ultrafinedust': data_list[1],
-                 'uv': uv_info, 'rain': rainfall+f"({weather_text})"}
+                 'uv': uv_info, 'rain': rainfall + f"({weather_text})"}
 
     return jsonify(data_dict)
 
