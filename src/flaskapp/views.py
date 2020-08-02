@@ -71,11 +71,9 @@ def route_data():
 
         db_time_list = time.split('.')
 
-        if (abs(current_lat - lat) < 0.0005 and abs(current_long - long) < 0.0005) and current_time_list[:2] == db_time_list[:2] and abs(int(current_time_list[3]) - int(db_time_list[3])) <= 3:
+        if (abs(current_lat - lat) < 0.0005 and abs(current_long - long) < 0.0005) and current_time_list[:3] == db_time_list[:3] and abs(int(current_time_list[3]) - int(db_time_list[3])) <= 3:
             exists = True
             db_sensor_datas = value['data']
-            if db_sensor_datas[0] > 100:
-                print(db_sensor_datas[0])
             fine_dust.append(db_sensor_datas[0])
             ultrafine_dust.append(db_sensor_datas[1])
             uv.append(db_sensor_datas[2])
