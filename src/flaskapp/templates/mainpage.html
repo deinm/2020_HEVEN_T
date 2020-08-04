@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="en">
     <head>
-
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -19,6 +18,32 @@
         <title>HEVEN_T</title>
     </head>
 <body>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">세부 기상정보</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="detailedChartArea1" class="mt-3">
+                    <canvas id="detailedChart1">브라우저에서 그래프를 지원하지 않아요. 크롬으로 다시 접속해 주세요.</canvas>
+                </div>
+                <div id="detailedChartArea2" class="mt-3">
+                    <canvas id="detailedChart2">브라우저에서 그래프를 지원하지 않아요. 크롬으로 다시 접속해 주세요.</canvas>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div>데이터가 없을 경우 값이 0으로 표시됩니다.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="wrapper d-flex align-items-stretch">
     <nav id="sidebar" class="active">
@@ -49,6 +74,10 @@
             <div id="location_text" class="txt_con08 dis-none">
             </div>
 
+            <div id="detailed_chart_text" class="active txt_con08 dis_none" data-toggle="modal" data-target="#exampleModalCenter">
+                <a><span class="txt_white fa fa-question-circle" aria-hidden="true"></span><span class="txt_white"> 자세한 수치 보기</span></a>
+            </div>
+
             <ul class="list-unstyled components">
                 <div id="dustChartArea" class="mt-3 dis_none">
                     <canvas id="dustChart">브라우저에서 그래프를 지원하지 않아요. 크롬으로 다시 접속해 주세요.</canvas>
@@ -60,13 +89,13 @@
                     <a><span class="fa fa-meh-o mr-2"></span>미세먼지 : <span id="dustText"></span></a>
                 </li>
                 <li id="ultradust" class="active dis_none">
-                    <a href="#"><span class="fa fa-frown-o mr-2"></span>초미세먼지 : <span id="ultradustText"></span></a>
+                    <a><span class="fa fa-frown-o mr-2"></span>초미세먼지 : <span id="ultradustText"></span></a>
                 </li>
                 <li id="uv" class="active dis_none">
-                    <a href="#"><span class="fa fa-sun-o mr-2"></span>자외선 : <span id="uvText"></span></a>
+                    <a><span class="fa fa-sun-o mr-2"></span>자외선 : <span id="uvText"></span></a>
                 </li>
                 <li id="rain" class="active dis_none">
-                    <a href="#"><span class="fa fa-umbrella mr-2"></span>강우량 : <span id="rainText"></span></a>
+                    <a><span class="fa fa-umbrella mr-2"></span>강우량 : <span id="rainText"></span></a>
                 </li>
             </ul>
             <div id="refresh" class="txt_con08 dis-none">
