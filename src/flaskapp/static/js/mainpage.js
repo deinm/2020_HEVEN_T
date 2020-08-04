@@ -119,6 +119,7 @@ function deleteInfoDiv(){
 
     $("#dustChartArea").addClass("dis_none");
     $("#uvChartArea").addClass("dis_none");
+    $("#detailed_chart_text").addClass("dis_none");
 
     $("#dust").addClass("dis_none");
     $("#dustText").addClass("dis_none");
@@ -140,9 +141,6 @@ function showLocation(){
 }
 
 $('#weather_button').click(function(){
-    // $("#dustChartArea").removeClass("dis_none");
-    // $("#uvChartArea").removeClass("dis_none");
-
     $("#info_text").removeClass("dis_none");
 
     showLocation();
@@ -166,17 +164,17 @@ let dustChart = new Chart(dustChartElem, {
             label: '미세먼지',
             borderColor: 'rgba(255, 99, 132, 1)',
             backgroundColor: 'rgba(255, 99, 132, 1)',
-            data: [{x: 0, y: 1},
-                {x: 1, y: 2},
-                {x: 2, y: 3}],
+            data: [{x: 0, y: 0},
+                {x: 1, y: 0},
+                {x: 2, y: 0}],
             fill: false,
         },{
             label: '초미세먼지',
             borderColor: 'rgba(255, 206, 86, 1)',
             backgroundColor: 'rgba(255, 206, 86, 1)',
-            data: [{x: 0, y: 1},
-                {x: 1, y: 2},
-                {x: 2, y: 1}],
+            data: [{x: 0, y: 0},
+                {x: 1, y: 0},
+                {x: 2, y: 0}],
             fill: false,
         }]
     },
@@ -227,17 +225,17 @@ let uvChart = new Chart(uvChartElem, {
             label: '자외선',
             borderColor: 'rgba(255, 138, 101, 1)',
             backgroundColor: 'rgba(255, 138, 101, 1)',
-            data: [{x: 0, y: 1},
-                {x: 1, y: 2},
-                {x: 2, y: 3}],
+            data: [{x: 0, y: 0},
+                {x: 1, y: 0},
+                {x: 2, y: 0}],
             fill: false,
         },{
             label: '강우량',
             borderColor: 'rgba(212, 225, 87, 1)',
             backgroundColor: 'rgba(212, 225, 87, 1)',
-            data: [{x: 0, y: 1},
-                {x: 1, y: 3},
-                {x: 2, y: 2}],
+            data: [{x: 0, y: 0},
+                {x: 1, y: 0},
+                {x: 2, y: 0}],
             fill: false,
         }]
     },
@@ -272,6 +270,128 @@ let uvChart = new Chart(uvChartElem, {
                 },
                 ticks: {
                     fontColor: 'white'
+                },
+            }]
+        }
+    }
+});
+
+
+let detailedChart1Elem = document.getElementById('detailedChart1').getContext('2d');
+let detailedChart1 = new Chart(detailedChart1Elem, {
+    type: 'line',
+    data: {
+        labels: [0, 1, 2],
+        datasets: [{
+            label: '미세먼지',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: 'rgba(255, 99, 132, 1)',
+            data: [{x: 0, y: 0},
+                {x: 1, y: 0},
+                {x: 2, y: 0}],
+            fill: false,
+        },{
+            label: '초미세먼지',
+            borderColor: 'rgba(255, 206, 86, 1)',
+            backgroundColor: 'rgba(255, 206, 86, 1)',
+            data: [{x: 0, y: 0},
+                {x: 1, y: 0},
+                {x: 2, y: 0}],
+            fill: false,
+        }]
+    },
+    options: {
+        responsive: true,
+        tooltips: {
+            mode: 'index',
+            intersect: false,
+        },
+        legend: {
+            labels: {
+                // This more specific font property overrides the global property
+                fontColor: 'black'
+            }
+        },
+        scales: {
+            xAxes: [{
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: '시간'
+                },
+                ticks: {
+                    fontColor: 'black'
+                },
+            }],
+            yAxes: [{
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: '척도'
+                },
+                ticks: {
+                    fontColor: 'black'
+                },
+            }]
+        }
+    }
+});
+
+
+let detailedChart2Elem = document.getElementById('detailedChart2').getContext('2d');
+let detailedChart2 = new Chart(detailedChart2Elem, {
+    type: 'line',
+    data: {
+        labels: [0, 1, 2],
+        datasets: [{
+            label: '자외선',
+            borderColor: 'rgba(255, 138, 101, 1)',
+            backgroundColor: 'rgba(255, 138, 101, 1)',
+            data: [{x: 0, y: 0},
+                {x: 1, y: 0},
+                {x: 2, y: 0}],
+            fill: false,
+        },{
+            label: '강우량',
+            borderColor: 'rgba(212, 225, 87, 1)',
+            backgroundColor: 'rgba(212, 225, 87, 1)',
+            data: [{x: 0, y: 0},
+                {x: 1, y: 0},
+                {x: 2, y: 0}],
+            fill: false,
+        }]
+    },
+    options: {
+        responsive: true,
+        tooltips: {
+            mode: 'index',
+            intersect: false,
+        },
+        legend: {
+            labels: {
+                // This more specific font property overrides the global property
+                fontColor: 'black'
+            }
+        },
+        scales: {
+            xAxes: [{
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: '시간'
+                },
+                ticks: {
+                    fontColor: 'black'
+                },
+            }],
+            yAxes: [{
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: '척도'
+                },
+                ticks: {
+                    fontColor: 'black'
                 },
             }]
         }
@@ -362,6 +482,7 @@ function searchInfo(location){
 
         $("#dustChartArea").removeClass("dis_none");
         $("#uvChartArea").removeClass("dis_none");
+        $("#detailed_chart_text").removeClass("dis_none");
 
         removeInfoDiv();
 
@@ -369,8 +490,8 @@ function searchInfo(location){
         let ultradustText = res['ultrafine_dust'];
         let uvText = res['uv'];
         let rainText = res['rain'];
-        let graph = res['graph'];
-        console.log(graph);
+        let graph = res['indicator'];
+        let detailedgraph = res['graph'];
 
         if (res['rain'] > 0.8) {
             rainText += "(비)";
@@ -426,11 +547,11 @@ function searchInfo(location){
         let dataset = dustChart.data.datasets;
 		for(let i=0; i<dataset.length; i++){
 			let data = dataset[i].data;
-			for(let j=0 ; j < data.length ; j++){
+			for(let j=0 ; j < data.length; j++){
 				data[j] = graph[j][i];
 			}
 		}
-		uvChart.update();
+		dustChart.update();
 
         let dataset2 = uvChart.data.datasets;
 		for(let i=0; i<dataset2.length; i++){
@@ -440,6 +561,24 @@ function searchInfo(location){
 			}
 		}
 		uvChart.update();
+
+        let dataset3 = detailedChart1.data.datasets;
+		for(let i=0; i<dataset3.length; i++){
+			let data = dataset3[i].data;
+			for(let j=0 ; j < data.length; j++){
+				data[j] = detailedgraph[j][i];
+			}
+		}
+		detailedChart1.update();
+
+        let dataset4 = detailedChart2.data.datasets;
+		for(let i=0; i<dataset4.length; i++){
+			let data = dataset4[i].data;
+			for(let j=0 ; j < data.length ; j++){
+				data[j] = detailedgraph[j][2+i];
+			}
+		}
+		detailedChart2.update();
     })
     .fail(function () {
 				data[j] = Math.floor(Math.random() * 50);
