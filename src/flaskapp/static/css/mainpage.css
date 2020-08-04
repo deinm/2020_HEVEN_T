@@ -8385,3 +8385,13 @@ a[data-toggle="collapse"] {
 	overflow: scroll;
 	font-size: medium;
 }
+
+#userInput::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+#userInput {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
