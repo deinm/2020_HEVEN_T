@@ -63,7 +63,7 @@ def route_data():
     current_time_list = current_time_formatted.split('.')
 
     # hours_data = [{'dust': 0, 'ultradust': 0, 'uv': 0, 'rain': 0}] * 3
-    hours_data = [[0, 0, 0, 0]] * 3
+    hours_data = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     cnt_data = [0, 0, 0]
 
     for key, value in gps_datas.items():
@@ -73,10 +73,10 @@ def route_data():
 
         db_time_list = time.split('.')
 
-        time_delta = abs(int(current_time_list[3]) - int(db_time_list[3]))
+        time_delta = int(current_time_list[3]) - int(db_time_list[3])
 
         if (abs(current_lat - lat) < 0.0005 and abs(
-                current_long - long) < 0.0005) and current_time_list[:3] == db_time_list[:3] and time_delta <= 3:
+                current_long - long) < 0.0005) and current_time_list[:3] == db_time_list[:3] and 0 <= time_delta <= 3:
             exists = True
             db_sensor_datas = value['data']
 
@@ -105,16 +105,60 @@ def route_data():
         pos_sensor_datas['none'] = True
         return jsonify(pos_sensor_datas)
 
-    pos_sensor_datas['fine_dust'] = int(sum(fine_dust) / len(fine_dust))
-    pos_sensor_datas['ultrafine_dust'] = int(sum(ultrafine_dust) / len(ultrafine_dust))
-    pos_sensor_datas['uv'] = int(sum(uv) / len(uv))
-    pos_sensor_datas['rain'] = round(sum(rain) / len(rain), 2)
+    pos_sensor_datas['fine_dust'] = int(sum(fine_dust) / len(fine_dust)) if len(fine_dust) != 0 else 0
+    pos_sensor_datas['ultrafine_dust'] = int(sum(ultrafine_dust) / len(ultrafine_dust)) if len(fine_dust) != 0 else 0
+    pos_sensor_datas['uv'] = int(sum(uv) / len(uv)) if len(fine_dust) != 0 else 0
+    pos_sensor_datas['rain'] = round(sum(rain) / len(rain), 2) if len(fine_dust) != 0 else 0
+
+    pos_indicator_datas = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+
+    for i in range(3):
+        for j in range(4):
+            if cnt_data[i] == 0:
+                continue
+            hours_data[i][j] /= cnt_data[i]
+
+    for idx, single_dataset in enumerate(hours_data):
+        if single_dataset[0] <= 30:
+            pos_indicator_datas[idx][0] = 0
+        elif single_dataset[0] <= 80:
+            pos_indicator_datas[idx][0] = 1
+        elif single_dataset[0] <= 150:
+            pos_indicator_datas[idx][0] = 2
+        else:
+            pos_indicator_datas[idx][0] = 3
+
+        if single_dataset[1] <= 15:
+            pos_indicator_datas[idx][1] = 0
+        elif single_dataset[1] <= 35:
+            pos_indicator_datas[idx][1] = 1
+        elif single_dataset[1] <= 75:
+            pos_indicator_datas[idx][1] = 2
+        else:
+            pos_indicator_datas[idx][1] = 3
+
+        if single_dataset[2] <= 2:
+            pos_indicator_datas[idx][2] = 0
+        elif single_dataset[2] <= 5:
+            pos_indicator_datas[idx][2] = 1
+        elif single_dataset[2] <= 7:
+            pos_indicator_datas[idx][2] = 2
+        else:
+            pos_indicator_datas[idx][2] = 3
+
+        if single_dataset[3] <= 1:
+            pos_indicator_datas[idx][3] = 0
+        elif single_dataset[3] <= 2:
+            pos_indicator_datas[idx][3] = 1
+        else:
+            pos_indicator_datas[idx][3] = 2
 
     for i in range(3):
         if cnt_data[i] != 0:
-            hours_data[i] = [round(single_hour_data/cnt_data[i], 2) for single_hour_data in hours_data[i]]
+            hours_data[i] = [round(single_hour_data / cnt_data[i], 2) for single_hour_data in hours_data[i]]
 
     pos_sensor_datas['graph'] = hours_data
+    pos_sensor_datas['indicator'] = pos_indicator_datas
 
     return jsonify(pos_sensor_datas)
 
