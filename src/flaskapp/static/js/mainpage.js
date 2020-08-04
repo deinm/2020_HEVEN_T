@@ -161,15 +161,14 @@ let dustChartElem = document.getElementById('dustChart').getContext('2d');
 let dustChart = new Chart(dustChartElem, {
     type: 'line',
     data: {
-        labels: [0, 1, 2, 3],
+        labels: [0, 1, 2],
         datasets: [{
             label: '미세먼지',
             borderColor: 'rgba(255, 99, 132, 1)',
             backgroundColor: 'rgba(255, 99, 132, 1)',
             data: [{x: 0, y: 1},
                 {x: 1, y: 2},
-                {x: 2, y: 3},
-                {x: 3, y: 2}],
+                {x: 2, y: 3}],
             fill: false,
         },{
             label: '초미세먼지',
@@ -177,8 +176,7 @@ let dustChart = new Chart(dustChartElem, {
             backgroundColor: 'rgba(255, 206, 86, 1)',
             data: [{x: 0, y: 1},
                 {x: 1, y: 2},
-                {x: 2, y: 1},
-                {x: 3, y: 0}],
+                {x: 2, y: 1}],
             fill: false,
         }]
     },
@@ -224,15 +222,14 @@ let uvChartElem = document.getElementById('uvChart').getContext('2d');
 let uvChart = new Chart(uvChartElem, {
     type: 'line',
     data: {
-        labels: [0, 1, 2, 3],
+        labels: [0, 1, 2],
         datasets: [{
             label: '자외선',
             borderColor: 'rgba(255, 138, 101, 1)',
             backgroundColor: 'rgba(255, 138, 101, 1)',
             data: [{x: 0, y: 1},
                 {x: 1, y: 2},
-                {x: 2, y: 3},
-                {x: 3, y: 2}],
+                {x: 2, y: 3}],
             fill: false,
         },{
             label: '강우량',
@@ -240,8 +237,7 @@ let uvChart = new Chart(uvChartElem, {
             backgroundColor: 'rgba(212, 225, 87, 1)',
             data: [{x: 0, y: 1},
                 {x: 1, y: 3},
-                {x: 2, y: 2},
-                {x: 3, y: 1}],
+                {x: 2, y: 2}],
             fill: false,
         }]
     },
@@ -373,6 +369,8 @@ function searchInfo(location){
         let ultradustText = res['ultrafine_dust'];
         let uvText = res['uv'];
         let rainText = res['rain'];
+        let graph = res['graph'];
+        console.log(graph);
 
         if (res['rain'] > 0.8) {
             rainText += "(비)";
@@ -423,8 +421,28 @@ function searchInfo(location){
         $('#ultradustText').text(ultradustText);
         $('#uvText').text(uvText);
         $('#rainText').text(rainText);
+
+        // update chart dataset
+        let dataset = dustChart.data.datasets;
+		for(let i=0; i<dataset.length; i++){
+			let data = dataset[i].data;
+			for(let j=0 ; j < data.length ; j++){
+				data[j] = graph[j][i];
+			}
+		}
+		uvChart.update();
+
+        let dataset2 = uvChart.data.datasets;
+		for(let i=0; i<dataset2.length; i++){
+			let data = dataset2[i].data;
+			for(let j=0 ; j < data.length ; j++){
+				data[j] = graph[j][2+i];
+			}
+		}
+		uvChart.update();
     })
     .fail(function () {
+				data[j] = Math.floor(Math.random() * 50);
         console.log("오류 발생");
     });
 }

@@ -26,7 +26,8 @@ def route_mainpage():
 def route_hud():
     dust, uv, rain = db_utils.get_dust_uv_rain()
 
-    return render_template("hud.html", dust=dust, uv=uv, rain=rain, co2=db_utils.get_CO2(), lat=db_utils.get_lat(), lon=db_utils.get_lon(), cards=0)
+    return render_template("hud.html", dust=dust, uv=uv, rain=rain, co2=db_utils.get_CO2(), lat=db_utils.get_lat(),
+                           lon=db_utils.get_lon(), cards=0)
 
 
 @app.route('/get_data', methods=['POST'])
@@ -61,6 +62,10 @@ def route_data():
     current_time_formatted = current_time.strftime('%Y.%-m.%-d.%H.%-M')
     current_time_list = current_time_formatted.split('.')
 
+    # hours_data = [{'dust': 0, 'ultradust': 0, 'uv': 0, 'rain': 0}] * 3
+    hours_data = [[0, 0, 0, 0]] * 3
+    cnt_data = [0, 0, 0]
+
     for key, value in gps_datas.items():
         lat, long, time = key.replace('_', ".").split(',')
         lat = float(lat)
@@ -68,9 +73,29 @@ def route_data():
 
         db_time_list = time.split('.')
 
-        if (abs(current_lat - lat) < 0.0005 and abs(current_long - long) < 0.0005) and current_time_list[:3] == db_time_list[:3] and abs(int(current_time_list[3]) - int(db_time_list[3])) <= 3:
+        time_delta = abs(int(current_time_list[3]) - int(db_time_list[3]))
+
+        if (abs(current_lat - lat) < 0.0005 and abs(
+                current_long - long) < 0.0005) and current_time_list[:3] == db_time_list[:3] and time_delta <= 3:
             exists = True
             db_sensor_datas = value['data']
+
+            if time_delta <= 1:
+                # 1시간 이내 데이터
+                cnt_data[0] += 1
+                for i in range(4):
+                    hours_data[0][i] += db_sensor_datas[i]
+            elif time_delta <= 2:
+                # 2시간 이내 데이터
+                cnt_data[1] += 1
+                for i in range(4):
+                    hours_data[0][i] += db_sensor_datas[i]
+            elif time_delta <= 3:
+                # 3시간 이내 데이터
+                cnt_data[2] += 1
+                for i in range(4):
+                    hours_data[0][i] += db_sensor_datas[i]
+
             fine_dust.append(db_sensor_datas[0])
             ultrafine_dust.append(db_sensor_datas[1])
             uv.append(db_sensor_datas[2])
@@ -84,6 +109,12 @@ def route_data():
     pos_sensor_datas['ultrafine_dust'] = int(sum(ultrafine_dust) / len(ultrafine_dust))
     pos_sensor_datas['uv'] = int(sum(uv) / len(uv))
     pos_sensor_datas['rain'] = round(sum(rain) / len(rain), 2)
+
+    for i in range(3):
+        if cnt_data[i] != 0:
+            hours_data[i] = [round(single_hour_data/cnt_data[i], 2) for single_hour_data in hours_data[i]]
+
+    pos_sensor_datas['graph'] = hours_data
 
     return jsonify(pos_sensor_datas)
 
@@ -162,14 +193,10 @@ def route_get_tts():
     response = urllib.request.urlopen(requested_data, data=data.encode('utf-8'))
     rescode = response.getcode()
 
-    # filename = f'{text}.mp3'
     if rescode == 200:
         response_body = response.read()
         mp3_file = base64.b64encode(response_body)
         mp3_file_decode = mp3_file.decode('utf8')
-
-        # with open(filename, 'wb') as f:
-        #     f.write(response_body)
         return jsonify({"success": mp3_file_decode})
     else:
         return jsonify({"error": str(rescode)})
