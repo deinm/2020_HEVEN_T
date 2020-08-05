@@ -23,24 +23,17 @@
 
     <div class="row h-100">
 
-
-    {% if cards == 3 %}
-    <div class="col-md-1 card-auto"></div>
-    {% endif %}
-
-    {% if cards == 2 %}
-    <div class="col-md-3 container"></div>
-    {% endif %}
-
+        <div class="col-md-1 card-auto container" id="blank_1_1"></div>
+        <div class="col-md-3 card-auto container" id="blank_3_1"></div>
 
     {% if 0 <= dust %}
     <div class="col-md-3 card-auto container">
         <div class="card h-100 space_300">
-            <img class="card-img-top"
-                {% if 0 <= dust < 30 %} src="/static/image/fine_dust_good.png"
-                {% elif 30 <= dust < 80 %} src="/static/image/fine_dust_normal.png"
-                {% elif 80 <= dust < 150 %} src="/static/image/fine_dust_bad.png"
-                {% elif 150 <= dust %} src="/static/image/fine_dust_very_bad.png"
+            <img class="card-img-top" id="dust_img"
+                {% if 0 <= dust < 31 %} src="/static/image/fine_dust_good.png"
+                {% elif 31 <= dust < 81 %} src="/static/image/fine_dust_normal.png"
+                {% elif 81 <= dust < 151 %} src="/static/image/fine_dust_bad.png"
+                {% elif 151 <= dust %} src="/static/image/fine_dust_very_bad.png"
                 {% endif %}
             >
             <div class="card-body">
@@ -53,7 +46,7 @@
     {% if 0 <= uv %}
     <div class="col-md-3 card-auto container">
         <div class="card h-100 space_300">
-            <img class="card-img-top"
+            <img class="card-img-top" id="uv_img"
             {% if 0 <= uv < 3 %} src="/static/image/UV_very_safe.png"
             {% elif 3 <= uv < 6 %} src="/static/image/UV_safe.png"
             {% elif 6 <= uv < 8 %} src="/static/image/UV_normal.png"
@@ -69,9 +62,9 @@
     {% endif %}
 
     {% if 0 < rain %}
-    <div class="col-md-3 card-auto container">
+    <div class="col-md-3 card-auto container" id="rain_container">
         <div class="card h-100 space_300">
-            <img class="card-img-top" src="/static/image/rain.png" alt="">
+            <img class="card-img-top" id="rain_img" src="/static/image/rain.png" alt="">
             <div class="card-body">
                 <h4 class="card-title" id="raintext">강우량 : {{ rain }}</h4>
             </div>
@@ -80,9 +73,9 @@
     {% endif %}
 
     {% if 30 < co2 %}
-    <div class="col-md-3 card-auto container">
+    <div class="col-md-3 card-auto container" id="co2_container">
         <div class="card h-100 space_300">
-            <img class="card-img-top" src="/static/image/CO2.png" alt="">
+            <img class="card-img-top" id="c02_img" src="/static/image/CO2.png" alt="">
             <div class="card-body">
                 <h4 class="card-title" id="co2text">CO₂ : {{ co2 }}</h4>
             </div>
@@ -95,15 +88,8 @@
         <source src="/static/sound/silence.mp3" id="audio_src" type="audio/mp3" />
     </audio>
 
-
-    {% if cards == 3 %}
-    <div class="col-md-1"></div>
-    {% endif %}
-
-    {% if cards == 2 %}
-    <div class="col-md-3 container"></div>
-    {% endif %}
-
+    <div class="col-md-1 `card-auto container" id="blank_1_2"></div>
+    <div class="col-md-3 card-auto container" id="blank_3_2"></div>
 
     </div>
     </div>
