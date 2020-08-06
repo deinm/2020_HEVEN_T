@@ -3800,7 +3800,10 @@ input[type="button"].btn-block {
 	padding: 1.25rem; }
 
 .card-title {
-	margin-bottom: 0.75rem; }
+	margin-bottom: 0.75rem;
+	font-weight: bold;
+	text-align: center;
+}
 
 .card-subtitle {
 	margin-top: -0.375rem;
