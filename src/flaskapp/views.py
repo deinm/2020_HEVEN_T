@@ -24,7 +24,8 @@ def route_mainpage():
 
 @app.route('/hud')
 def route_hud():
-    dust, uv, rain, co2 = db_utils.db_get_hud_data()
+    dust, _, uv, rain = db_utils.db_get_hud_data()
+    co2 = db_utils.get_CO2()
 
     card_cnt = 2
 
@@ -262,8 +263,8 @@ def route_get_hud_data():
     current_lat = float(db_utils.get_lat())
     current_long = float(db_utils.get_lon())
 
-    sensor_datas = db_utils.db_get_hud_data()
-    dust, uv, rain, co2 = sensor_datas
+    dust, _, uv, rain = db_utils.db_get_hud_data()
+    co2 = db_utils.get_CO2()
 
     data_dict = {'dust': dust, 'uv': uv, 'rain': rain, 'co2': co2, 'lat': current_lat, 'long': current_long}
 
