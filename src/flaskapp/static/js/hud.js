@@ -113,18 +113,66 @@ function refreshWindow(){
 
         // HUD_Audio
 
-        if(dust<=30 && (before_dust>30 || before_dust<0)){
+        console.log(dust, before_dust);
+
+
+        // if(co2<=30 && before_co2>30){
+        //     text = "차량 내부 이산화탄소 수치가 정상 범위 내로 들어왔습니다. 창문을 올리셔도 되요.";
+        // }
+        // else if(co2>30 && before_co2<=30){
+        //     text = "차량 내부 이산화탄소 수치가 높습니다. 환기를 해주세요";
+        // }
+        // else{
+        //     text = ""
+        // }
+
+
+
+        if(dust<=30 && (before_dust>30 || before_dust<0) && (co2<=30 && before_co2<=30 || co2>30 && before_co2>30)){
             text = "미세먼지 수치가 "+ dust +"입니다. 아주 좋아요.";
         }
-        else if(dust>30 && dust<=80 && (before_dust<=30 || before_dust>80)){
+        else if(dust>30 && dust<=80 && (before_dust<=30 || before_dust>80) && (co2<=30 && before_co2<=30 || co2>30 && before_co2>30)){
             text = "미세먼지 수치가 "+ dust +"입니다. 보통이에요.";
         }
-        else if(dust>80 && dust<=150 && (before_dust<=80 || before_dust>150)){
+        else if(dust>80 && dust<=150 && (before_dust<=80 || before_dust>150) && (co2<=30 && before_co2<=30 || co2>30 && before_co2>30)){
             text = "미세먼지 수치가 "+ dust +"입니다. 공기가 나쁘니 창문을 닫아주세요.";
         }
-        else if(dust>150 && before_dust<=150){
+        else if(dust>150 && before_dust<=150 && (co2<=30 && before_co2<=30 || co2>30 && before_co2>30)){
             text = "미세먼지 수치가 "+ dust +"입니다. 아주 나빠요. 공기청정기 가동을 위해 창문을 닫아주세요.";
         }
+
+
+
+
+
+        else if((dust<=30 && (before_dust>30 || before_dust<0) && (co2<=30 && before_co2>30))){
+            text = "미세먼지 수치가 "+ dust +"입니다. 아주 좋아요. 차량 내부 이산화탄소 수치가 정상 범위 내로 들어왔습니다. 창문을 올리셔도 되요.";
+        }
+        else if((dust>30 && dust<=80 && (before_dust<=30 || before_dust>80)) && (co2<=30 && before_co2>30)){
+            text = "미세먼지 수치가 "+ dust +"입니다. 보통이에요. 차량 내부 이산화탄소 수치가 정상 범위 내로 들어왔습니다. 창문을 올리셔도 되요.";
+        }
+        else if((dust>80 && dust<=150 && (before_dust<=80 || before_dust>150)) && (co2<=30 && before_co2>30)){
+            text = "미세먼지 수치가 "+ dust +"입니다. 공기가 나쁘니 창문을 닫아주세요. 차량 내부 이산화탄소 수치가 정상 범위 내로 들어왔습니다. 창문을 올리셔도 되요.";
+        }
+        else if((dust>150 && before_dust<=150) && (co2<=30 && before_co2>30)){
+            text = "미세먼지 수치가 "+ dust +"입니다. 아주 나빠요. 공기청정기 가동을 위해 창문을 닫아주세요. 차량 내부 이산화탄소 수치가 정상 범위 내로 들어왔습니다. 창문을 올리셔도 되요.";
+        }
+
+
+        else if((dust<=30 && (before_dust>30 || before_dust<0) && (co2>30 && before_co2<=30))){
+            text = "미세먼지 수치가 "+ dust +"입니다. 아주 좋아요. 차량 내부 이산화탄소 수치가 높습니다. 환기를 해주세요";
+        }
+        else if((dust>30 && dust<=80 && (before_dust<=30 || before_dust>80)) && (co2>30 && before_co2<=30)){
+            text = "미세먼지 수치가 "+ dust +"입니다. 보통이에요. 차량 내부 이산화탄소 수치가 높습니다. 환기를 해주세요";
+        }
+        else if((dust>80 && dust<=150 && (before_dust<=80 || before_dust>150)) && (co2>30 && before_co2<=30)){
+            text = "미세먼지 수치가 "+ dust +"입니다. 공기가 나쁘니 창문을 닫아주세요. 차량 내부 이산화탄소 수치가 높습니다. 환기를 해주세요";
+        }
+        else if((dust>150 && before_dust<=150) && (co2>30 && before_co2<=30)){
+            text = "미세먼지 수치가 "+ dust +"입니다. 아주 나빠요. 공기청정기 가동을 위해 창문을 닫아주세요. 차량 내부 이산화탄소 수치가 높습니다. 환기를 해주세요";
+        }
+
+
         else{
             text = ""
         }
@@ -154,23 +202,25 @@ function refreshWindow(){
         //     }
         // }, 10000);
 
-        console.log(co2, before_co2);
 
-        if(co2<=30 && before_co2>30){
-            text = "차량 내부 이산화탄소 수치가 정상 범위 내로 들어왔습니다. 창문을 올리셔도 되요.";
-        }
-        else if(co2>30 && before_co2<=30){
-            text = "차량 내부 이산화탄소 수치가 높습니다. 환기를 해주세요";
-        }
-        else{
-            text = ""
-        }
 
-        setTimeout(function() {
-            if(text !== ""){
-                getTTS(text);
-            }
-        }, 10000);
+        // console.log(co2, before_co2);
+        //
+        // if(co2<=30 && before_co2>30){
+        //     text = "차량 내부 이산화탄소 수치가 정상 범위 내로 들어왔습니다. 창문을 올리셔도 되요.";
+        // }
+        // else if(co2>30 && before_co2<=30){
+        //     text = "차량 내부 이산화탄소 수치가 높습니다. 환기를 해주세요";
+        // }
+        // else{
+        //     text = ""
+        // }
+        //
+        // setTimeout(function() {
+        //     if(text !== ""){
+        //         getTTS(text);
+        //     }
+        // }, 10000);
 
         before_dust = dust;
         before_uv = uv;

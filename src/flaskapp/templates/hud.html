@@ -26,7 +26,7 @@
         <div class="col-md-1 card-auto container" id="blank_1_1"></div>
         <div class="col-md-3 card-auto container" id="blank_3_1"></div>
 
-    {% if 0 <= dust %}
+
     <div class="col-md-3 card-auto container">
         <div class="card h-100 space_300">
             <img class="card-img-top" id="dust_img"
@@ -41,9 +41,9 @@
             </div>
         </div>
     </div>
-    {% endif %}
 
-    {% if 0 <= uv %}
+
+
     <div class="col-md-3 card-auto container">
         <div class="card h-100 space_300">
             <img class="card-img-top" id="uv_img"
@@ -59,9 +59,9 @@
             </div>
         </div>
     </div>
-    {% endif %}
 
-    {% if 0 < rain %}
+
+
     <div class="col-md-3 card-auto container" id="rain_container">
         <div class="card h-100 space_300">
             <img class="card-img-top" id="rain_img" src="/static/image/rain.png" alt="">
@@ -70,9 +70,9 @@
             </div>
         </div>
     </div>
-    {% endif %}
 
-    {% if 30 < co2 %}
+
+
     <div class="col-md-3 card-auto container" id="co2_container">
         <div class="card h-100 space_300">
             <img class="card-img-top" id="c02_img" src="/static/image/CO2.png" alt="">
@@ -82,7 +82,7 @@
         </div>
 
     </div>
-    {% endif %}
+
 
     <audio autoplay id="audio_tts">
         <source src="/static/sound/silence.mp3" id="audio_src" type="audio/mp3" />
