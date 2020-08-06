@@ -15,13 +15,13 @@ function refreshWindow(){
     // get data from database
     $.ajax({
         type: "post",
-        url: "/get_data",
+        url: "/get_hud_data",
         data: {},
         dataType: "text"
     }).done(function (result) {
         let res = JSON.parse(result);
 
-        dust = res['fine_dust'];
+        dust = res['dust'];
         uv = res['uv'];
         rain = res['rain'];
         co2 = res['co2'];
@@ -39,28 +39,28 @@ function refreshWindow(){
         // }
 
         // Center the image
-        if(rain <= 0 && co2 <= 30) {
+        if(rain <= 0 && co2 <= 2000) {
             $('#blank_1_1').hide();
             $('#blank_1_2').hide();
             $('#blank_3_1').show();
             $('#blank_3_2').show();
         }
 
-        else if(rain > 0 && co2 <= 30) {
+        else if(rain > 0 && co2 <= 2000) {
             $('#blank_1_1').show();
             $('#blank_1_2').show();
             $('#blank_3_1').hide();
             $('#blank_3_2').hide();
         }
 
-        else if(rain <= 0 && co2 > 30) {
+        else if(rain <= 0 && co2 > 2000) {
             $('#blank_1_1').show();
             $('#blank_1_2').show();
             $('#blank_3_1').hide();
             $('#blank_3_2').hide();
         }
 
-        else if(rain > 0 && co2 > 30) {
+        else if(rain > 0 && co2 > 2000) {
             $('#blank_1_1').hide();
             $('#blank_1_2').hide();
             $('#blank_3_1').hide();
@@ -104,15 +104,16 @@ function refreshWindow(){
             $('#rain_container').show();
         }
 
-        if(co2<=30){
+        if(co2<=2000){
             $('#co2_container').hide();
         }
-        else if(co2>30){
+        else if(co2>2000){
             $('#co2_container').show();
         }
 
         // HUD_Audio
 
+        console.log(co2, before_co2);
         console.log(dust, before_dust);
 
 
@@ -141,28 +142,28 @@ function refreshWindow(){
             text = "미세먼지 수치가 "+ dust +"입니다. 아주 나빠요. 공기청정기 가동을 위해 창문을 닫아주세요.";
         }
         else if((dust<=30 && (before_dust>30 || before_dust<0) && (co2<=30 && before_co2>30))){
-            text = "미세먼지 수치가 "+ dust +"입니다. 아주 좋아요. 차량 내부 이산화탄소 수치가 정상 범위 내로 들어왔습니다. 창문을 올리셔도 되요.";
+            text = "미세먼지 수치가 "+ dust +"입니다. 아주 좋아요.차량 내부 이산화탄소 수치가 정상 범위 내로 들어왔습니다. 창문을 올리셔도 되요.";
         }
         else if((dust>30 && dust<=80 && (before_dust<=30 || before_dust>80)) && (co2<=30 && before_co2>30)){
-            text = "미세먼지 수치가 "+ dust +"입니다. 보통이에요. 차량 내부 이산화탄소 수치가 정상 범위 내로 들어왔습니다. 창문을 올리셔도 되요.";
+            text = "미세먼지 수치가 "+ dust +"입니다. 보통이에요.차량 내부 이산화탄소 수치가 정상 범위 내로 들어왔습니다. 창문을 올리셔도 되요.";
         }
         else if((dust>80 && dust<=150 && (before_dust<=80 || before_dust>150)) && (co2<=30 && before_co2>30)){
-            text = "미세먼지 수치가 "+ dust +"입니다. 공기가 나쁘니 창문을 닫아주세요. 차량 내부 이산화탄소 수치가 정상 범위 내로 들어왔습니다. 창문을 올리셔도 되요.";
+            text = "미세먼지 수치가 "+ dust +"입니다. 공기가 나쁘니 창문을 닫아주세요.차량 내부 이산화탄소 수치가 정상 범위 내로 들어왔습니다. 창문을 올리셔도 되요.";
         }
         else if((dust>150 && before_dust<=150) && (co2<=30 && before_co2>30)){
-            text = "미세먼지 수치가 "+ dust +"입니다. 아주 나빠요. 공기청정기 가동을 위해 창문을 닫아주세요. 차량 내부 이산화탄소 수치가 정상 범위 내로 들어왔습니다. 창문을 올리셔도 되요.";
+            text = "미세먼지 수치가 "+ dust +"입니다. 아주 나빠요. 공기청정기 가동을 위해 창문을 닫아주세요.차량 내부 이산화탄소 수치가 정상 범위 내로 들어왔습니다. 창문을 올리셔도 되요.";
         }
         else if((dust<=30 && (before_dust>30 || before_dust<0) && (co2>30 && before_co2<=30))){
-            text = "미세먼지 수치가 "+ dust +"입니다. 아주 좋아요. 차량 내부 이산화탄소 수치가 높습니다. 환기를 해주세요";
+            text = "미세먼지 수치가 "+ dust +"입니다. 아주 좋아요.차량 내부 이산화탄소 수치가 높습니다. 환기를 해주세요";
         }
         else if((dust>30 && dust<=80 && (before_dust<=30 || before_dust>80)) && (co2>30 && before_co2<=30)){
-            text = "미세먼지 수치가 "+ dust +"입니다. 보통이에요. 차량 내부 이산화탄소 수치가 높습니다. 환기를 해주세요";
+            text = "미세먼지 수치가 "+ dust +"입니다. 보통이에요.차량 내부 이산화탄소 수치가 높습니다. 환기를 해주세요";
         }
         else if((dust>80 && dust<=150 && (before_dust<=80 || before_dust>150)) && (co2>30 && before_co2<=30)){
-            text = "미세먼지 수치가 "+ dust +"입니다. 공기가 나쁘니 창문을 닫아주세요. 차량 내부 이산화탄소 수치가 높습니다. 환기를 해주세요";
+            text = "미세먼지 수치가 "+ dust +"입니다. 공기가 나쁘니 창문을 닫아주세요.차량 내부 이산화탄소 수치가 높습니다. 환기를 해주세요";
         }
         else if((dust>150 && before_dust<=150) && (co2>30 && before_co2<=30)){
-            text = "미세먼지 수치가 "+ dust +"입니다. 아주 나빠요. 공기청정기 가동을 위해 창문을 닫아주세요. 차량 내부 이산화탄소 수치가 높습니다. 환기를 해주세요";
+            text = "미세먼지 수치가 "+ dust +"입니다. 아주 나빠요. 공기청정기 가동을 위해 창문을 닫아주세요.차량 내부 이산화탄소 수치가 높습니다. 환기를 해주세요";
         }
         else if(co2<=30 && before_co2>30 &&((dust<=30 && before_dust <=30) || (dust>30 && dust<=80 && before_dust>30 && before_dust<=80) || (dust>80 && dust<=150 && before_dust>80 && before_dust<=150) || (dust>150 && before_dust>150))){
             text = "차량 내부 이산화탄소 수치가 정상 범위 내로 들어왔습니다. 창문을 올리셔도 되요.";
