@@ -501,31 +501,31 @@ function searchInfo(location){
 
         if (res['fine_dust'] <= 30) {
             finedustText += "(좋음)";
-            $('.fa-meh-o').css('color', '#ffffff');
+            // $('.fa-meh-o').css('color', '#ffffff');
         } else if (res['fine_dust'] <= 80) {
             finedustText += "(보통)";
-            $('.fa-meh-o').css('color', '#FDD835');
+            // $('.fa-meh-o').css('color', '#FDD835');
         } else if (res['fine_dust'] <= 150) {
             finedustText += "(나쁨)";
-            $('.fa-meh-o').css('color', '#FF5722');
+            // $('.fa-meh-o').css('color', '#FF5722');
         } else {
             finedustText += "(매우나쁨)";
-            $('.fa-meh-o').css('color', '#DF1C44');
+            // $('.fa-meh-o').css('color', '#DF1C44');
         }
 
         if (res['ultrafine_dust'] <= 15) {
             ultradustText += "(좋음)";
-            $('.fa-frown-o').css('color', '#ffffff');
+            // $('.fa-frown-o').css('color', '#ffffff');
         } else if (res['ultrafine_dust'] <= 35) {
             ultradustText += "(보통)";
-            $('.fa-frown-o').css('color', '#FDD835');
+            // $('.fa-frown-o').css('color', '#FDD835');
             // $('#ultradustText').css('color','#FDD835');
         } else if (res['ultrafine_dust'] <= 75) {
             ultradustText += "(나쁨)";
-            $('.fa-frown-o').css('color', '#FF5722');
+            // $('.fa-frown-o').css('color', '#FF5722');
         } else {
             ultradustText += "(매우나쁨)";
-            $('.fa-frown-o').css('color', '#DF1C44');
+            // $('.fa-frown-o').css('color', '#DF1C44');
         }
 
         if (res['uv'] <= 2) {

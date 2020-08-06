@@ -18,6 +18,12 @@ def get_lon(carname="12가3456"):
     lon = ref_GPS.split(',')[1].replace("_", ".")
     return lon
 
+
+def db_get_hud_data(carname="12가3456"):
+    ref_datas = db.child("CO2").child(carname).child("data").get().val()
+    return ref_datas
+
+
 def get_dust_uv_rain():
     ref_GPS = db.child("car_gps").child("12가3456").child("GPS").get().val()
     current_lat = float(ref_GPS.split(',')[0].replace('_', "."))
@@ -44,7 +50,9 @@ def get_dust_uv_rain():
         lat = float(lat)
         long = float(long)
         db_time_list = time.split('.')
-        if abs(current_lat - lat) < 0.0005 and abs(current_lon - long) < 0.0005 and current_time_list[:3] == db_time_list[:3] and abs(int(current_time_list[3]) - int(db_time_list[3])) <= 3:
+        if abs(current_lat - lat) < 0.0005 and abs(current_lon - long) < 0.0005 and current_time_list[
+                                                                                    :3] == db_time_list[:3] and abs(
+            int(current_time_list[3]) - int(db_time_list[3])) <= 3:
             exists = True
             db_sensor_datas = value['data']
             dust.append(db_sensor_datas[0])
@@ -57,6 +65,5 @@ def get_dust_uv_rain():
     average_dust = int(sum(dust) / len(dust))
     average_uv = int(sum(uv) / len(uv))
     average_rain = int(sum(rain) / len(rain))
-
 
     return average_dust, average_uv, average_rain

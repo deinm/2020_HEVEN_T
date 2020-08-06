@@ -15,13 +15,13 @@ function refreshWindow(){
     // get data from database
     $.ajax({
         type: "post",
-        url: "/get_data",
+        url: "/get_hud_data",
         data: {},
         dataType: "text"
     }).done(function (result) {
         let res = JSON.parse(result);
 
-        dust = res['fine_dust'];
+        dust = res['dust'];
         uv = res['uv'];
         rain = res['rain'];
         co2 = res['co2'];
@@ -113,8 +113,6 @@ function refreshWindow(){
 
         // HUD_Audio
 
-        console.log(dust, before_dust);
-
         if(dust<=30 && (before_dust>30 || before_dust<0)){
             text = "미세먼지 수치가 "+ dust +"입니다. 아주 좋아요.";
         }
@@ -186,7 +184,6 @@ function refreshWindow(){
 }
 
 function getTTS(text){
-    console.log(count);
     $.ajax({
         type: "post",
         url: "/get_tts",
@@ -194,7 +191,6 @@ function getTTS(text){
         dataType: "text"
     }).done(function (result) {
         let res = JSON.parse(result);
-        console.log(res);
 
         let audio = $("#audio_tts");
         $("#audio_src").attr("src", "data:audio/ogg;base64,"+res['success']);

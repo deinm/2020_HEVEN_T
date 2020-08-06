@@ -246,3 +246,18 @@ def route_get_tts():
         return jsonify({"error": str(rescode)})
 
     return jsonify({"error": "not implemented"})
+
+
+@app.route('/get_hud_data', methods=['POST'])
+def route_get_hud_data():
+    text_data = request.form.to_dict()
+
+    current_lat = float(db_utils.get_lat())
+    current_long = float(db_utils.get_lon())
+
+    sensor_datas = db_utils.db_get_hud_data()
+    dust, uv, rain, co2 = sensor_datas
+
+    data_dict = {'dust': dust, 'uv': uv, 'rain': rain, 'co2': co2, 'lat': current_lat, 'long': current_long}
+
+    return jsonify(data_dict)
