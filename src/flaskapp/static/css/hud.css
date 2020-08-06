@@ -3769,7 +3769,7 @@ input[type="button"].btn-block {
 
 .card {
 	position: relative;
-	top: 180px;
+	top: 100px;
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
