@@ -22,7 +22,7 @@ config = {
 class SecureFlask(Flask):
     def process_response(self, response):
         # Every response will be processed here first
-        response.headers['server'] = 'ZEZEDU'
+        response.headers['server'] = 'HEVEN'
         super(SecureFlask, self).process_response(response)
 
         return response
